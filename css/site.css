@@ -34,7 +34,8 @@ h1, h2, h3, h4 {
    so never set a heavier one here — browsers would fake-bold it. */
 h1 {
   font-family: var(--font-title);
-  font-weight: 400;
+  font-weight: var(--fw-title);
+  font-style: var(--fs-title-style);
   font-size: var(--fs-h1);
   line-height: var(--lh-title);
   letter-spacing: var(--tracking-title);
@@ -357,7 +358,8 @@ img { max-width: 100%; display: block; height: auto; }
 }
 .cta h2 {
   color: #fff; max-width: 18ch;
-  font-family: var(--font-title); font-weight: 400;
+  font-family: var(--font-title);
+  font-weight: var(--fw-title); font-style: var(--fs-title-style);
   font-size: var(--fs-hero); line-height: var(--lh-title);
   letter-spacing: var(--tracking-title);
 }
