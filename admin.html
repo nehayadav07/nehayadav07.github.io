@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--font-body);font-size:15px;line-height:1.55}
+  h1,h2,h3{font-family:var(--font-display);letter-spacing:var(--tracking-tight);margin:0}
+  a{color:var(--c-accent)}
+
+  .bar{position:sticky;top:0;z-index:20;background:var(--c-surface);border-bottom:1px solid var(--c-line);
+       display:flex;align-items:center;gap:12px;padding:12px 20px;flex-wrap:wrap}
+  .bar h1{font-size:16px;margin-right:auto}
+  .bar .chip{font-size:12px;color:var(--c-ink-faint)}
+
+  .layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;min-height:calc(100vh - 57px)}
+  .side{border-right:1px solid var(--c-line);padding:20px 12px;background:var(--c-surface)}
+  .side button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;
+       padding:9px 12px;font:inherit;color:var(--c-ink-soft);cursor:pointer}
+  .side button:hover{background:var(--c-bg)}
+  .side button.on{background:var(--c-accent-tint);color:var(--c-accent);font-weight:500}
+  .side hr{border:0;border-top:1px solid var(--c-line);margin:14px 4px}
+
+  .pane{padding:26px 28px 90px;max-width:900px}
+  .pane > p.hint{color:var(--c-ink-faint);font-size:13px;margin:6px 0 22px}
+
+  fieldset{border:1px solid var(--c-line);border-radius:12px;padding:18px;margin:0 0 20px;background:var(--c-surface)}
+  legend{font-family:var(--font-display);font-weight:600;padding:0 8px;font-size:14px}
+
+  label.fld{display:block;margin-bottom:14px}
+  label.fld > span{display:block;font-size:12px;font-weight:500;color:var(--c-ink-soft);margin-bottom:5px}
+  label.fld > em{display:block;font-size:11px;color:var(--c-ink-faint);font-style:normal;margin-top:4px}
+  input[type=text],input[type=url],input[type=email],textarea,select{
+    width:100%;padding:9px 11px;border:1px solid var(--c-border-ui);border-radius:8px;
+    font:inherit;font-size:14px;background:var(--c-bg);color:var(--c-ink)}
+  textarea{min-height:88px;resize:vertical;line-height:1.5}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--c-accent);outline-offset:1px;border-color:transparent}
+
+  .cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  @media(max-width:760px){.cols2{grid-template-columns:1fr}.layout{grid-template-columns:1fr}
+    .side{border-right:0;border-bottom:1px solid var(--c-line);display:flex;flex-wrap:wrap;gap:4px}
+    .side button{width:auto}.side hr{display:none}.pane{padding:20px 16px 80px}}
+
+  .item{border:1px solid var(--c-line);border-radius:10px;padding:14px;margin-bottom:12px;background:var(--c-bg)}
+  .item__bar{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+  .item__bar strong{font-family:var(--font-display);font-size:13px;margin-right:auto}
+
+  button.b{background:var(--c-surface);border:1px solid var(--c-line-strong);border-radius:7px;
+    padding:6px 11px;font:inherit;font-size:13px;cursor:pointer;color:var(--c-ink)}
+  button.b:hover{border-color:var(--c-ink)}
+  button.b.pri{background:var(--c-accent);border-color:var(--c-accent);color:#fff}
+  button.b.pri:hover{background:var(--c-accent-hover)}
+  button.b.del{color:#9B2C2C;border-color:#E2C1C1}
+  button.b.tiny{padding:3px 8px;font-size:12px}
+
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .swatch{display:flex;align-items:center;gap:8px}
+  .swatch input[type=color]{width:38px;height:34px;padding:0;border:1px solid var(--c-line-strong);border-radius:7px;background:none;cursor:pointer}
+  .swatch input[type=text]{flex:1}
+
+  .note{border:1px dashed var(--c-line-strong);border-radius:10px;padding:14px;font-size:13px;color:var(--c-ink-soft);margin-bottom:18px;background:var(--c-surface)}
+  .note code{background:var(--c-accent-tint);padding:1px 5px;border-radius:4px;font-size:12px}
+  ol.steps{padding-left:20px;margin:8px 0 0}
+  ol.steps li{margin-bottom:6px}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:var(--c-ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;
+    transition:.25s;pointer-events:none;z-index:50}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>Site admin</h1>
+  <span class="chip" id="status">Loaded</span>
+  <button class="b" id="btnPreview">Preview site</button>
+  <button class="b" id="btnDraft">Save draft</button>
+  <button class="b pri" id="btnExport">Download content.js</button>
+</div>
+
+<div class="layout">
+  <nav class="side" id="tabs"></nav>
+  <div class="pane" id="pane"></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="js/content.js"></script>
+<script>
+(function () {
+"use strict";
+
+/* ---------------- state ---------------- */
+var DEFAULTS = JSON.parse(JSON.stringify(window.SITE_CONTENT || {}));
+var D = JSON.parse(JSON.stringify(DEFAULTS));
+var DRAFT_KEY = "portfolio_admin_draft";
+var PREVIEW_KEY = "portfolio_admin_preview";
+
+try {
+  var saved = localStorage.getItem(DRAFT_KEY);
+  if (saved && confirm("A saved draft was found. Load it?\n\nCancel = start from the published content.js")) {
+    D = JSON.parse(saved);
+    setStatus("Draft loaded");
+  }
+} catch (e) {}
+
+var THEME = {
+  "--c-bg": "#FAF7F1", "--c-surface": "#FFFFFF", "--c-surface-alt": "#F1EBE0",
+  "--c-ink": "#1B2D24", "--c-ink-soft": "#4A5A50", "--c-ink-faint": "#5E6C63",
+  "--c-accent": "#2E6F63", "--c-accent-hover": "#1F5147", "--c-accent-tint": "#DDEAE5",
+  "--c-line": "#E2DACD", "--c-line-strong": "#C9BDA9", "--c-border-ui": "#8A8073", "--c-focus": "#B0873A"
+};
+var THEME_TEXT = {
+  fontImport: "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Inter:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap",
+  fontTitle: "'Source Serif 4', Georgia, 'Times New Roman', serif",
+  fontDisplay: "'Instrument Sans', 'Helvetica Neue', Arial, sans-serif",
+  fontBody: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+  wPage: "1160px", wNarrow: "700px", radius: "12px", radiusLg: "20px",
+  radiusBtn: "8px", radiusChip: "999px"
+};
+try {
+  var th = localStorage.getItem(DRAFT_KEY + "_theme");
+  if (th) { var o = JSON.parse(th); Object.assign(THEME, o.vars || {}); Object.assign(THEME_TEXT, o.text || {}); }
+} catch (e) {}
+
+/* ---------------- path helpers ---------------- */
+function get(p) {
+  return p.split(".").reduce(function (o, k) {
+    if (o == null) return undefined;
+    return /^\d+$/.test(k) ? o[+k] : o[k];
+  }, D);
+}
+function set(p, v) {
+  var ks = p.split("."), last = ks.pop();
+  var o = ks.reduce(function (a, k) { return /^\d+$/.test(k) ? a[+k] : a[k]; }, D);
+  if (o) o[/^\d+$/.test(last) ? +last : last] = v;
+}
+function esc(s) {
+  return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function arr(p) { var a = get(p); if (!Array.isArray(a)) { set(p, []); a = get(p); } return a; }
+
+/* ---------------- field builders ---------------- */
+function F(path, label, hint, type) {
+  var v = get(path);
+  var input = (type === "area")
+    ? '<textarea data-path="' + path + '">' + esc(v) + "</textarea>"
+    : '<input type="text" data-path="' + path + '" value="' + esc(v) + '">';
+  return '<label class="fld"><span>' + esc(label) + "</span>" + input +
+    (hint ? "<em>" + esc(hint) + "</em>" : "") + "</label>";
+}
+function FA(path, label, hint) { return F(path, label, hint, "area"); }
+
+function FSel(path, label, options, hint) {
+  var v = get(path);
+  return '<label class="fld"><span>' + esc(label) + '</span><select data-path="' + path + '">' +
+    options.map(function (o) {
+      return '<option value="' + esc(o) + '"' + (o === v ? " selected" : "") + ">" + esc(o) + "</option>";
+    }).join("") + "</select>" + (hint ? "<em>" + esc(hint) + "</em>" : "") + "</label>";
+}
+
+/* paragraph array (array of strings) */
+function FLines(path, label, hint) {
+  var v = (get(path) || []).join("\n\n");
+  return '<label class="fld"><span>' + esc(label) + '</span><textarea data-lines="' + path +
+    '" style="min-height:150px">' + esc(v) + "</textarea>" +
+    "<em>" + esc(hint || "One paragraph per block, separated by a blank line.") + "</em></label>";
+}
+/* comma list (array of strings on one line) */
+function FCsv(path, label, hint) {
+  var v = (get(path) || []).join(", ");
+  return '<label class="fld"><span>' + esc(label) + '</span><input type="text" data-csv="' + path +
+    '" value="' + esc(v) + '">' + "<em>" + esc(hint || "Separate with commas.") + "</em></label>";
+}
+
+/* generic array editor. fields = [[key,label,hint,type]] */
+function List(path, title, fields, blank, opts) {
+  opts = opts || {};
+  var items = arr(path);
+  var html = "<fieldset><legend>" + esc(title) + "</legend>";
+  if (opts.hint) html += '<p class="hint" style="margin-top:0;font-size:12px;color:var(--c-ink-faint)">' + esc(opts.hint) + "</p>";
+  if (!items.length) html += '<p style="font-size:13px;color:var(--c-ink-faint)">Nothing here yet.</p>';
+
+  items.forEach(function (it, i) {
+    var label = opts.label ? opts.label(it, i) : ((it.label || it.title || it.role || it.name || "Item") + "");
+    html += '<div class="item"><div class="item__bar"><strong>' + esc(label) + "</strong>" +
+      '<button class="b tiny" data-act="up" data-list="' + path + '" data-i="' + i + '">↑</button>' +
+      '<button class="b tiny" data-act="down" data-list="' + path + '" data-i="' + i + '">↓</button>' +
+      '<button class="b tiny del" data-act="del" data-list="' + path + '" data-i="' + i + '">Delete</button></div>' +
+      '<div class="cols2">';
+    fields.forEach(function (f) {
+      var p = path + "." + i + "." + f[0];
+      html += (f[3] === "area")
+        ? '<div style="grid-column:1/-1">' + FA(p, f[1], f[2]) + "</div>"
+        : F(p, f[1], f[2]);
+    });
+    html += "</div></div>";
+  });
+
+  html += '<button class="b" data-act="add" data-list="' + path + '" data-blank="' +
+    esc(JSON.stringify(blank)) + '">+ Add ' + esc(opts.noun || "item") + "</button></fieldset>";
+  return html;
+}
+
+/* ---------------- tabs ---------------- */
+var TABS = [
+  ["site",    "Header & site"],
+  ["nav",     "Navigation"],
+  ["home",    "Home page"],
+  ["cases",   "Case studies"],
+  ["about",   "About & career"],
+  ["contact", "Contact"],
+  ["pages",   "Extra pages"],
+  ["theme",   "Theme & colours"],
+  ["export",  "Publish"]
+];
+var current = "site";
+
+var views = {};
+
+views.site = function () {
+  return "<h2>Header &amp; site details</h2>" +
+    '<p class="hint">These appear in the top bar, the footer, and page metadata.</p>' +
+    "<fieldset><legend>Identity</legend><div class=\"cols2\">" +
+      F("site.name", "Name", "Shown in header and footer") +
+      F("site.initials", "Logo initials", "Used if no logo image is set") +
+      F("site.logoImage", "Logo image path", "e.g. images/logo.png — leave empty to use initials") +
+      F("site.role", "Role line", "e.g. Product Design at Salesforce") +
+      F("site.email", "Email") +
+      F("site.location", "Location") +
+      F("site.linkedin", "LinkedIn URL") +
+      F("site.resumeUrl", "Résumé file or URL", "Upload the PDF to your repo, then put its path here") +
+    "</div></fieldset>" +
+    "<fieldset><legend>Footer</legend>" +
+      FA("site.footerBlurb", "Footer description") +
+      F("site.copyright", "Copyright line") +
+    "</fieldset>";
+};
+
+views.nav = function () {
+  var out = "<h2>Navigation</h2>" +
+    '<p class="hint">Menu links, header buttons, and the three footer columns.</p>' +
+    '<div class="note">Link targets: use <code>index.html</code>, <code>work.html</code>, ' +
+    '<code>about.html</code>, <code>contact.html</code>, a case study like ' +
+    '<code>case.html?id=salesforce-ux</code>, an extra page like <code>page.html?id=writing</code>, ' +
+    "or a full <code>https://</code> address.</div>";
+
+  out += List("nav", "Menu links", [["label","Label"],["href","Link target"]],
+    { label: "New link", href: "index.html" }, { noun: "menu link" });
+
+  out += List("navButtons", "Header buttons", [["label","Label"],["href","Link target"],["style","Style (primary or ghost)"]],
+    { label: "New button", href: "#", style: "ghost" }, { noun: "button" });
+
+  arr("footer").forEach(function (col, i) {
+    out += List("footer." + i + ".links", "Footer column " + (i + 1) + ": " + (col.title || ""),
+      [["label","Label"],["href","Link target"]],
+      { label: "New link", href: "#" },
+      { noun: "link", hint: "Column heading below." });
+    out += "<fieldset style=\"margin-top:-12px\">" + F("footer." + i + ".title", "Column heading") + "</fieldset>";
+  });
+  return out;
+};
+
+views.home = function () {
+  return "<h2>Home page</h2>" +
+    "<fieldset><legend>Hero</legend>" +
+      F("home.eyebrow", "Small line above the headline") +
+      FA("home.headline", "Headline") +
+      FA("home.intro", "Intro paragraph") +
+      '<div class="cols2">' +
+        F("home.portrait.src", "Portrait image path", "e.g. images/portrait.jpg") +
+        F("home.portrait.alt", "Image alt text", "Describe the image for screen readers") +
+      "</div></fieldset>" +
+    List("home.buttons", "Hero buttons", [["label","Label"],["href","Link target"],["style","primary or ghost"]],
+      { label: "New button", href: "#", style: "ghost" }, { noun: "button" }) +
+    List("home.facts", "Three highlight cards",
+      [["title","Title"],["text","Description","","area"]],
+      { title: "New highlight", text: "" }, { noun: "highlight", label: function (i) { return i.title; } }) +
+    "<fieldset><legend>Selected work section</legend>" +
+      F("home.workHeading", "Section heading") +
+      FA("home.workIntro", "Section intro") +
+    "</fieldset>" +
+    "<fieldset><legend>Closing call to action</legend>" +
+      F("home.ctaEyebrow", "Small line") +
+      F("home.ctaTitle", "Heading") +
+      FA("home.ctaText", "Text") +
+    "</fieldset>" +
+    List("home.ctaButtons", "Call-to-action buttons", [["label","Label"],["href","Link target"],["style","primary or ghost"]],
+      { label: "New button", href: "#", style: "ghost" }, { noun: "button" });
+};
+
+/* ----- case studies ----- */
+var openCase = 0;
+views.cases = function () {
+  var cases = arr("cases");
+  var out = "<h2>Case studies</h2>" +
+    '<p class="hint">Each case study gets its own page at case.html?id=…</p>' +
+    '<div class="note">Add images by uploading files to the <code>images</code> folder in your repo, ' +
+    "then typing the path (e.g. <code>images/salesforce-hero.png</code>) into the image field.</div>";
+
+  out += '<fieldset><legend>All case studies</legend>';
+  cases.forEach(function (c, i) {
+    out += '<div class="item"><div class="item__bar"><strong>' + esc(c.title || c.id) + "</strong>" +
+      '<button class="b tiny" data-act="up" data-list="cases" data-i="' + i + '">↑</button>' +
+      '<button class="b tiny" data-act="down" data-list="cases" data-i="' + i + '">↓</button>' +
+      '<button class="b tiny' + (openCase === i ? " pri" : "") + '" data-act="opencase" data-i="' + i + '">' +
+        (openCase === i ? "Editing" : "Edit") + "</button>" +
+      '<button class="b tiny del" data-act="del" data-list="cases" data-i="' + i + '">Delete</button></div></div>';
+  });
+  out += '<button class="b" data-act="add" data-list="cases" data-blank="' + esc(JSON.stringify({
+    id: "new-case-" + Date.now().toString(36), title: "New case study", client: "Company",
+    subtitle: "", summary: "", tags: [], cover: { src: "", alt: "" },
+    meta: [{ label: "Role", value: "" }, { label: "Company", value: "" },
+           { label: "Scope", value: "" }, { label: "Duration", value: "" }],
+    blocks: [{ type: "text", eyebrow: "Context", heading: "Heading", body: "Write here." }]
+  })) + '">+ Add case study</button></fieldset>';
+
+  var c = cases[openCase];
+  if (!c) return out;
+  var P = "cases." + openCase;
+
+  out += "<h2 style=\"margin-top:34px\">Editing: " + esc(c.title) + "</h2>" +
+    "<fieldset><legend>Basics</legend><div class=\"cols2\">" +
+      F(P + ".id", "Page id", "Used in the URL. Lowercase, dashes only.") +
+      F(P + ".client", "Company / client") +
+      F(P + ".subtitle", "Short label", "e.g. Enterprise UX leadership") +
+      F(P + ".cover.src", "Cover image path") +
+      F(P + ".cover.alt", "Cover image alt text") +
+    "</div>" +
+      FA(P + ".title", "Case study title") +
+      FA(P + ".summary", "One-line summary") +
+      FCsv(P + ".tags", "Tags") +
+    "</fieldset>" +
+    List(P + ".meta", "Fact strip (role, scope, duration…)",
+      [["label","Label"],["value","Value"]], { label: "Label", value: "Value" }, { noun: "fact" });
+
+  /* blocks */
+  out += "<fieldset><legend>Page content blocks</legend>";
+  (c.blocks || []).forEach(function (b, i) {
+    var BP = P + ".blocks." + i;
+    out += '<div class="item"><div class="item__bar"><strong>' + esc(b.type) + " block</strong>" +
+      '<button class="b tiny" data-act="up" data-list="' + P + '.blocks" data-i="' + i + '">↑</button>' +
+      '<button class="b tiny" data-act="down" data-list="' + P + '.blocks" data-i="' + i + '">↓</button>' +
+      '<button class="b tiny del" data-act="del" data-list="' + P + '.blocks" data-i="' + i + '">Delete</button></div>';
+
+    if (b.type === "text") {
+      out += '<div class="cols2">' + F(BP + ".eyebrow", "Small label") + F(BP + ".heading", "Heading") + "</div>" +
+             FA(BP + ".body", "Text");
+    } else if (b.type === "list") {
+      out += '<div class="cols2">' + F(BP + ".eyebrow", "Small label") + F(BP + ".heading", "Heading") + "</div>" +
+             FLines(BP + ".items", "List items", "One bullet per line.");
+    } else if (b.type === "stats") {
+      out += '<div class="cols2">' + F(BP + ".eyebrow", "Small label") + F(BP + ".heading", "Heading") + "</div>" +
+             List(BP + ".items", "Numbers", [["num","Big number"],["label","Label"]],
+               { num: "00", label: "Metric" }, { noun: "number", label: function (x) { return x.num; } });
+    } else if (b.type === "quote") {
+      out += FA(BP + ".quote", "Quote") + F(BP + ".cite", "Who said it");
+    } else if (b.type === "image") {
+      out += '<div class="cols2">' + F(BP + ".src", "Image path") + F(BP + ".alt", "Alt text") + "</div>" +
+             F(BP + ".caption", "Caption");
+    } else if (b.type === "gallery") {
+      out += '<div class="cols2">' + F(BP + ".eyebrow", "Small label") + F(BP + ".heading", "Heading") + "</div>" +
+             List(BP + ".items", "Images", [["src","Image path"],["alt","Alt text"],["caption","Caption"]],
+               { src: "", alt: "", caption: "" }, { noun: "image", label: function (x) { return x.src || "Image"; } });
+    }
+    out += "</div>";
+  });
+
+  out += '<div class="row-actions">' +
+    ["text","list","stats","quote","image","gallery"].map(function (t) {
+      return '<button class="b" data-act="addblock" data-i="' + openCase + '" data-type="' + t + '">+ ' + t + "</button>";
+    }).join("") + "</div></fieldset>";
+
+  return out;
+};
+
+views.about = function () {
+  return "<h2>About &amp; career</h2>" +
+    "<fieldset><legend>About page</legend>" +
+      F("about.title", "Page title") +
+      FA("about.intro", "Intro line") +
+      FLines("about.body", "Body paragraphs") +
+      '<div class="cols2">' + F("about.photo.src", "Photo path") + F("about.photo.alt", "Photo alt text") + "</div>" +
+    "</fieldset>" +
+    "<fieldset><legend>Skills</legend>" + F("about.skillsTitle", "Heading") +
+      FCsv("about.skills", "Skills") + "</fieldset>" +
+    "<fieldset><legend>Career section heading</legend>" + F("experienceTitle", "Heading") + "</fieldset>" +
+    List("experience", "Career timeline",
+      [["when","Dates"],["role","Role"],["org","Company"],["location","Location"],["note","Description","","area"]],
+      { when: "", role: "New role", org: "", location: "", note: "" },
+      { noun: "role", label: function (e) { return (e.role || "") + " · " + (e.org || ""); } }) +
+    "<fieldset><legend>Education heading</legend>" + F("about.educationTitle", "Heading") + "</fieldset>" +
+    List("about.education", "Education",
+      [["when","Years"],["degree","Degree"],["school","Institution"],["note","Note","","area"]],
+      { when: "", degree: "", school: "", note: "" },
+      { noun: "entry", label: function (e) { return e.school || "Entry"; } });
+};
+
+views.contact = function () {
+  var on = (get("contact.form.endpoint") || "").trim() !== "";
+  return "<h2>Contact</h2>" +
+    "<fieldset><legend>Page</legend>" +
+      F("contact.eyebrow", "Small line above the title") +
+      F("contact.title", "Title") + FA("contact.intro", "Intro") +
+      FA("contact.note", "Small note at the bottom") +
+    "</fieldset>" +
+    List("contact.links", "Quick link pills", [["label","Label"],["href","Link target"]],
+      { label: "New link", href: "#" }, { noun: "pill" }) +
+    List("contact.methods", "Ways to reach you",
+      [["label","Label"],["value","Shown text"],["href","Link (optional)","mailto:… or https://…"]],
+      { label: "Label", value: "", href: "" }, { noun: "method" }) +
+
+    '<div class="note"><strong>Contact form — ' + (on ? "ON" : "OFF") + "</strong>" +
+      "<p style=\"margin:8px 0 0\">GitHub Pages can't send email by itself, so the form posts to a free relay " +
+      "that forwards messages to your inbox. Leave the endpoint empty and the form is hidden — the page still " +
+      "shows your links, which always work.</p>" +
+      "<p style=\"margin:8px 0 0\"><strong>Web3Forms</strong> (free, no account): go to web3forms.com, enter " +
+      "your email, they send you an access key. Endpoint is <code>https://api.web3forms.com/submit</code> " +
+      "and paste the key below.</p>" +
+      "<p style=\"margin:8px 0 0\"><strong>Formspree</strong> (free, 50/month, needs an account): create a form, " +
+      "paste its endpoint, leave the access key empty.</p></div>" +
+
+    "<fieldset><legend>Contact form</legend>" +
+      F("contact.form.endpoint", "Endpoint URL", "Empty = form hidden") +
+      F("contact.form.accessKey", "Access key", "Web3Forms only. Leave empty for Formspree.") +
+      '<div class="cols2">' +
+        F("contact.form.heading", "Form heading") +
+        F("contact.form.subject", "Email subject line") +
+        F("contact.form.buttonLabel", "Button label") +
+        F("contact.form.sendingLabel", "Button label while sending") +
+      "</div>" +
+      FA("contact.form.successMessage", "Message shown after sending") +
+      FA("contact.form.errorMessage", "Message shown if sending fails") +
+    "</fieldset>";
+};
+
+var openPage = 0;
+views.pages = function () {
+  var pages = arr("pages");
+  var out = "<h2>Extra pages</h2>" +
+    '<p class="hint">Pages built from a template. They appear at page.html?id=… — add them to Navigation to link them.</p>' +
+    '<div class="note"><strong>Templates</strong><ol class="steps">' +
+      "<li><code>text</code> — a title, intro and paragraphs.</li>" +
+      "<li><code>links</code> — a list of links with short descriptions (good for writing, talks, resources).</li>" +
+      "<li><code>gallery</code> — a grid of images with captions.</li>" +
+    "</ol></div>";
+
+  out += "<fieldset><legend>All pages</legend>";
+  pages.forEach(function (p, i) {
+    out += '<div class="item"><div class="item__bar"><strong>' + esc(p.title) +
+      ' <span style="font-weight:400;color:var(--c-ink-faint)">(' + esc(p.template) + ")</span></strong>" +
+      '<button class="b tiny" data-act="up" data-list="pages" data-i="' + i + '">↑</button>' +
+      '<button class="b tiny" data-act="down" data-list="pages" data-i="' + i + '">↓</button>' +
+      '<button class="b tiny' + (openPage === i ? " pri" : "") + '" data-act="openpage" data-i="' + i + '">' +
+        (openPage === i ? "Editing" : "Edit") + "</button>" +
+      '<button class="b tiny del" data-act="del" data-list="pages" data-i="' + i + '">Delete</button></div></div>';
+  });
+  out += '<div class="row-actions">' +
+    ["text","links","gallery"].map(function (t) {
+      return '<button class="b" data-act="addpage" data-type="' + t + '">+ New ' + t + " page</button>";
+    }).join("") + "</div></fieldset>";
+
+  var pg = pages[openPage];
+  if (!pg) return out;
+  var PP = "pages." + openPage;
+
+  out += "<h2 style=\"margin-top:34px\">Editing: " + esc(pg.title) + "</h2>" +
+    "<fieldset><legend>Basics</legend><div class=\"cols2\">" +
+      F(PP + ".id", "Page id", "Used in the URL: page.html?id=this") +
+      FSel(PP + ".template", "Template", ["text","links","gallery"]) +
+    "</div>" + F(PP + ".title", "Title") + FA(PP + ".intro", "Intro") + "</fieldset>";
+
+  if (pg.template === "text") {
+    out += "<fieldset><legend>Content</legend>" + FLines(PP + ".body", "Paragraphs") + "</fieldset>";
+  } else if (pg.template === "links") {
+    out += List(PP + ".items", "Links", [["label","Label"],["href","Link target"],["note","Short description"]],
+      { label: "New link", href: "#", note: "" }, { noun: "link" });
+  } else {
+    out += List(PP + ".items", "Images", [["src","Image path"],["alt","Alt text"],["caption","Caption"]],
+      { src: "", alt: "", caption: "" }, { noun: "image", label: function (x) { return x.src || "Image"; } });
+  }
+  return out;
+};
+
+views.theme = function () {
+  var labels = {
+    "--c-bg": "Page background", "--c-surface": "Cards & panels", "--c-surface-alt": "Alternating band",
+    "--c-ink": "Headings", "--c-ink-soft": "Body text", "--c-ink-faint": "Captions & meta",
+    "--c-accent": "Accent (links, buttons)", "--c-accent-hover": "Accent hover", "--c-accent-tint": "Accent tint (tags)",
+    "--c-line": "Borders", "--c-line-strong": "Chip outlines", "--c-border-ui": "Button & input borders", "--c-focus": "Keyboard focus ring"
+  };
+  var out = "<h2>Theme &amp; colours</h2>" +
+    '<p class="hint">Changes preview live on this page. Download theme.css when you are happy and replace the file in your repo.</p>' +
+    "<fieldset><legend>Colours</legend>";
+  Object.keys(THEME).forEach(function (k) {
+    out += '<label class="fld"><span>' + esc(labels[k] || k) + " <code style=\"color:var(--c-ink-faint)\">" + k + "</code></span>" +
+      '<span class="swatch"><input type="color" data-theme="' + k + '" value="' + esc(THEME[k]) + '">' +
+      '<input type="text" data-themetext="' + k + '" value="' + esc(THEME[k]) + '"></span></label>';
+  });
+  out += "</fieldset><fieldset><legend>Type &amp; layout</legend>" +
+    '<label class="fld"><span>Google Fonts URL</span><input type="text" data-tt="fontImport" value="' + esc(THEME_TEXT.fontImport) + '">' +
+      "<em>Pick families on fonts.google.com, copy the URL from inside their &lt;link&gt;, paste it here. This is the only place fonts are loaded.</em></label>" +
+    '<label class="fld"><span>Page title font stack (serif)</span><input type="text" data-tt="fontTitle" value="' + esc(THEME_TEXT.fontTitle) + '">' +
+      "<em>Used for the big h1 on every page.</em></label>" +
+    '<label class="fld"><span>Heading font stack</span><input type="text" data-tt="fontDisplay" value="' + esc(THEME_TEXT.fontDisplay) + '">' +
+      "</label>" +
+    '<label class="fld"><span>Body font stack</span><input type="text" data-tt="fontBody" value="' + esc(THEME_TEXT.fontBody) + '"></label>' +
+    '<div class="cols2">' +
+      '<label class="fld"><span>Max page width</span><input type="text" data-tt="wPage" value="' + esc(THEME_TEXT.wPage) + '"></label>' +
+      '<label class="fld"><span>Max reading width</span><input type="text" data-tt="wNarrow" value="' + esc(THEME_TEXT.wNarrow) + '"></label>' +
+      '<label class="fld"><span>Button radius</span><input type="text" data-tt="radiusBtn" value="' + esc(THEME_TEXT.radiusBtn) + '"></label>' +
+      '<label class="fld"><span>Tag / chip radius</span><input type="text" data-tt="radiusChip" value="' + esc(THEME_TEXT.radiusChip) + '">' +
+        "<em>999px makes them pill-shaped.</em></label>" +
+      '<label class="fld"><span>Card radius</span><input type="text" data-tt="radius" value="' + esc(THEME_TEXT.radius) + '"></label>' +
+      '<label class="fld"><span>Large card radius</span><input type="text" data-tt="radiusLg" value="' + esc(THEME_TEXT.radiusLg) + '"></label>' +
+    "</div></fieldset>" +
+    '<div class="row-actions"><button class="b pri" id="dlTheme">Download theme.css</button>' +
+    '<button class="b" id="resetTheme">Reset colours</button></div>';
+  return out;
+};
+
+views.export = function () {
+  return "<h2>Publish your changes</h2>" +
+    '<div class="note"><strong>How to put changes live</strong><ol class="steps">' +
+      "<li>Click <strong>Download content.js</strong> below.</li>" +
+      "<li>In GitHub, open the <code>js</code> folder and click <code>content.js</code>.</li>" +
+      "<li>Click the pencil icon, select all the text, delete it, and paste in the new file's contents. Or use <em>Add file → Upload files</em> and drop the downloaded file in to replace it.</li>" +
+      "<li>Commit to <code>main</code>. The site rebuilds and goes live automatically.</li>" +
+    "</ol></div>" +
+    '<div class="note"><strong>Adding images</strong><ol class="steps">' +
+      "<li>In GitHub, open the <code>images</code> folder → <em>Add file → Upload files</em>.</li>" +
+      "<li>Upload your file, e.g. <code>portrait.jpg</code>, and commit.</li>" +
+      "<li>Come back here and type <code>images/portrait.jpg</code> into the matching image field.</li>" +
+      "<li>Keep images under about 400&nbsp;KB so pages stay fast.</li>" +
+    "</ol></div>" +
+    '<div class="row-actions">' +
+      '<button class="b pri" id="dlContent">Download content.js</button>' +
+      '<button class="b" id="dlTheme2">Download theme.css</button>' +
+      '<button class="b" id="copyContent">Copy content.js to clipboard</button>' +
+      '<button class="b del" id="resetAll">Discard all my edits</button>' +
+    "</div>" +
+    '<fieldset style="margin-top:22px"><legend>Preview of content.js</legend>' +
+      '<textarea readonly id="outbox" style="min-height:320px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>' +
+    "</fieldset>";
+};
+
+/* ---------------- render ---------------- */
+function renderTabs() {
+  document.getElementById("tabs").innerHTML = TABS.map(function (t, i) {
+    return (i === 7 ? "<hr>" : "") +
+      '<button data-tab="' + t[0] + '" class="' + (current === t[0] ? "on" : "") + '">' + t[1] + "</button>";
+  }).join("");
+}
+function render() {
+  renderTabs();
+  document.getElementById("pane").innerHTML = views[current]();
+  if (current === "export") document.getElementById("outbox").value = serialize();
+  applyTheme();
+  window.scrollTo(0, 0);
+}
+
+/* ---------------- theme ---------------- */
+function applyTheme() {
+  Object.keys(THEME).forEach(function (k) { document.documentElement.style.setProperty(k, THEME[k]); });
+}
+function themeCss() {
+  var lines = [
+    "/* THEME.CSS — generated from admin.html. Edit here or in admin. */",
+    "",
+    "/* Fonts load here, so this stays the only file you edit. */",
+    "@import url('" + THEME_TEXT.fontImport + "');",
+    "",
+    ":root {",
+    "",
+    "  /* colours */"
+  ];
+  Object.keys(THEME).forEach(function (k) { lines.push("  " + k + ": " + THEME[k] + ";"); });
+  lines.push("",
+    "  /* type */",
+    "  --font-title:   " + THEME_TEXT.fontTitle + ";",
+    "  --font-display: " + THEME_TEXT.fontDisplay + ";",
+    "  --font-body:    " + THEME_TEXT.fontBody + ";",
+    "  --fs-title: clamp(2.25rem, 1.5rem + 6.5vw, 8.75rem);",
+    "  --fs-hero:  clamp(2rem, 1.2rem + 4vw, 4.75rem);",
+    "  --fs-h1:    var(--fs-title);",
+    "  --fs-h2:    clamp(1.6rem, 3.4vw, 2.15rem);",
+    "  --fs-h3:    clamp(1.16rem, 2.2vw, 1.4rem);",
+    "  --fs-lead:  clamp(1.03rem, 1.8vw, 1.2rem);",
+    "  --fs-body:  1rem;",
+    "  --fs-small: 0.875rem;",
+    "  --fs-micro: 0.775rem;",
+    "  --lh-title: 1.0;",
+    "  --lh-tight: 1.08;",
+    "  --lh-snug:  1.32;",
+    "  --lh-body:  1.62;",
+    "  --tracking-title: -0.012em;",
+    "  --tracking-tight: -0.022em;",
+    "  --tracking-wide:   0.07em;",
+    "",
+    "  /* spacing */",
+    "  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;",
+    "  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:88px;",
+    "  --section-y:   clamp(56px, 8vw, 104px);",
+    "  --page-gutter: clamp(20px, 5vw, 40px);",
+    "",
+    "  /* layout */",
+    "  --w-page:   " + THEME_TEXT.wPage + ";",
+    "  --w-narrow: " + THEME_TEXT.wNarrow + ";",
+    "  --w-wide:   1320px;",
+    "  --radius-btn:  " + THEME_TEXT.radiusBtn + ";",
+    "  --radius-chip: " + THEME_TEXT.radiusChip + ";",
+    "  --radius-sm:   6px;",
+    "  --radius:      " + THEME_TEXT.radius + ";",
+    "  --radius-lg:   " + THEME_TEXT.radiusLg + ";",
+    "  --shadow-card: 0 1px 2px rgba(22,33,43,.05);",
+    "  --shadow-lift: 0 10px 30px -12px rgba(22,33,43,.22);",
+    "  --header-h: 68px;",
+    "}");
+  return lines.join("\n") + "\n";
+}
+
+/* ---------------- serialize / download ---------------- */
+function serialize() {
+  return "/* ============================================================\n" +
+    "   CONTENT.JS — all words and links on the site.\n" +
+    "   Generated by admin.html. Replace js/content.js with this file.\n" +
+    "   ============================================================ */\n\n" +
+    "window.SITE_CONTENT = " + JSON.stringify(D, null, 2) + ";\n";
+}
+function download(name, text, mime) {
+  var b = new Blob([text], { type: mime || "text/plain;charset=utf-8" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(b); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function setStatus(t) { document.getElementById("status").textContent = t; }
+function toast(t) {
+  var el = document.getElementById("toast");
+  el.textContent = t; el.classList.add("on");
+  setTimeout(function () { el.classList.remove("on"); }, 2000);
+}
+function saveDraft(quiet) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(D));
+    localStorage.setItem(DRAFT_KEY + "_theme", JSON.stringify({ vars: THEME, text: THEME_TEXT }));
+    if (!quiet) toast("Draft saved in this browser");
+    setStatus("Draft saved");
+  } catch (e) { if (!quiet) toast("Could not save — browser storage is blocked"); }
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener("input", function (e) {
+  var t = e.target;
+  if (t.dataset.path)  { set(t.dataset.path, t.value); saveDraft(true); }
+  else if (t.dataset.lines) {
+    set(t.dataset.lines, t.value.split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean));
+    saveDraft(true);
+  }
+  else if (t.dataset.csv) {
+    set(t.dataset.csv, t.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean));
+    saveDraft(true);
+  }
+  else if (t.dataset.theme) {
+    THEME[t.dataset.theme] = t.value; applyTheme(); saveDraft(true);
+    var pair = document.querySelector('[data-themetext="' + t.dataset.theme + '"]');
+    if (pair) pair.value = t.value;
+  }
+  else if (t.dataset.themetext) {
+    THEME[t.dataset.themetext] = t.value; applyTheme(); saveDraft(true);
+    var p2 = document.querySelector('[data-theme="' + t.dataset.themetext + '"]');
+    if (p2 && /^#[0-9a-f]{6}$/i.test(t.value)) p2.value = t.value;
+  }
+  else if (t.dataset.tt) { THEME_TEXT[t.dataset.tt] = t.value; saveDraft(true); }
+});
+document.addEventListener("change", function (e) {
+  if (e.target.dataset.path && e.target.tagName === "SELECT") { set(e.target.dataset.path, e.target.value); render(); }
+});
+
+document.addEventListener("click", function (e) {
+  var b = e.target.closest("button");
+  if (!b) return;
+
+  if (b.dataset.tab) { current = b.dataset.tab; render(); return; }
+
+  var act = b.dataset.act;
+  if (act === "add") {
+    arr(b.dataset.list).push(JSON.parse(b.dataset.blank)); saveDraft(true); render(); return;
+  }
+  if (act === "del") {
+    if (!confirm("Delete this permanently?")) return;
+    arr(b.dataset.list).splice(+b.dataset.i, 1); saveDraft(true); render(); return;
+  }
+  if (act === "up" || act === "down") {
+    var a = arr(b.dataset.list), i = +b.dataset.i, j = act === "up" ? i - 1 : i + 1;
+    if (j < 0 || j >= a.length) return;
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp; saveDraft(true); render(); return;
+  }
+  if (act === "opencase") { openCase = +b.dataset.i; render(); return; }
+  if (act === "openpage") { openPage = +b.dataset.i; render(); return; }
+
+  if (act === "addblock") {
+    var blanks = {
+      text:    { type: "text", eyebrow: "", heading: "Heading", body: "Write here." },
+      list:    { type: "list", eyebrow: "", heading: "Heading", items: ["First point"] },
+      stats:   { type: "stats", eyebrow: "", heading: "Results", items: [{ num: "00", label: "Metric" }] },
+      quote:   { type: "quote", quote: "Quote text.", cite: "Role, Company" },
+      image:   { type: "image", src: "", alt: "", caption: "" },
+      gallery: { type: "gallery", eyebrow: "", heading: "Gallery", items: [{ src: "", alt: "", caption: "" }] }
+    };
+    var cs = arr("cases")[+b.dataset.i];
+    if (!cs.blocks) cs.blocks = [];
+    cs.blocks.push(JSON.parse(JSON.stringify(blanks[b.dataset.type])));
+    saveDraft(true); render(); return;
+  }
+
+  if (act === "addpage") {
+    var t = b.dataset.type;
+    var np = { id: "page-" + Date.now().toString(36), title: "New page", template: t, intro: "" };
+    if (t === "text") np.body = ["Write your first paragraph here."];
+    else np.items = t === "links"
+      ? [{ label: "New link", href: "#", note: "" }]
+      : [{ src: "", alt: "", caption: "" }];
+    arr("pages").push(np);
+    openPage = arr("pages").length - 1;
+    current = "pages"; saveDraft(true); render(); return;
+  }
+
+  switch (b.id) {
+    case "btnDraft": saveDraft(); break;
+    case "btnExport":
+    case "dlContent": download("content.js", serialize(), "text/javascript;charset=utf-8"); toast("content.js downloaded"); break;
+    case "dlTheme":
+    case "dlTheme2": download("theme.css", themeCss(), "text/css;charset=utf-8"); toast("theme.css downloaded"); break;
+    case "copyContent":
+      navigator.clipboard.writeText(serialize())
+        .then(function () { toast("Copied"); })
+        .catch(function () { toast("Copy blocked — use the download button"); });
+      break;
+    case "resetTheme":
+      THEME = { "--c-bg":"#FAF7F1","--c-surface":"#FFFFFF","--c-surface-alt":"#F1EBE0",
+        "--c-ink":"#1B2D24","--c-ink-soft":"#4A5A50","--c-ink-faint":"#5E6C63",
+        "--c-accent":"#2E6F63","--c-accent-hover":"#1F5147","--c-accent-tint":"#DDEAE5",
+        "--c-line":"#E2DACD","--c-line-strong":"#C9BDA9","--c-border-ui":"#8A8073","--c-focus":"#B0873A" };
+      saveDraft(true); render(); toast("Colours reset"); break;
+    case "resetAll":
+      if (!confirm("Discard every edit and go back to the published content.js?")) return;
+      D = JSON.parse(JSON.stringify(DEFAULTS));
+      try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(DRAFT_KEY + "_theme"); } catch (err) {}
+      render(); toast("Reset to published content"); break;
+    case "btnPreview":
+      try {
+        localStorage.setItem(PREVIEW_KEY, JSON.stringify(D));
+        window.open("index.html?preview=1", "_blank");
+      } catch (err) { toast("Preview needs browser storage — download the file instead"); }
+      break;
+  }
+});
+
+render();
+})();
+</script>
+</body>
+</html>
