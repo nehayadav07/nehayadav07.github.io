@@ -1,0 +1,154 @@
+/* ============================================================
+   THEME.CSS — the only file you need for visual changes.
+   ------------------------------------------------------------
+   Palette and type follow the Grow Gently "Editorial Organic"
+   identity: Forest Ink, Grow Teal, Heritage Gold, with
+   Playfair Display / Lora / DM Sans.
+
+   NOTE: the hex values below are my approximations of your
+   brand colours. Replace them with your real ones — then
+   re-check contrast (see the note at the bottom of section 2).
+
+   WHERE THINGS ARE
+     1  Fonts        the @import + which family goes where
+     2  Colours      every colour on the site
+     3  Type scale   heading and body sizes
+     4  Spacing      the 4px step scale + section rhythm
+     5  Layout       page widths, corner radius, shadows
+     6  Dark mode    optional, delete if unwanted
+
+   COMMON EDITS
+     Button shape .......... --radius-btn        (section 5)
+     Tag / chip shape ...... --radius-chip       (section 5)
+     Accent colour ......... --c-accent          (section 2)
+     Page background ....... --c-bg              (section 2)
+     Content width ......... --w-page            (section 5)
+     Title size ............ --fs-title          (section 3)
+     Section spacing ....... --section-y         (section 4)
+   ============================================================ */
+
+
+/* ---------- 1. FONTS --------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+
+  --font-title:   'Playfair Display', Georgia, serif;              /* big page titles     */
+  --font-display: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;  /* headings, UI, labels */
+  --font-body:    'Lora', Georgia, serif;                          /* paragraphs          */
+
+
+  /* ---------- 2. COLOURS ------------------------------------ */
+
+  /* surfaces — warm paper, not clinical white */
+  --c-bg:            #FAF7F1;   /* page background               */
+  --c-surface:       #FFFFFF;   /* cards, panels, form           */
+  --c-surface-alt:   #F1EBE0;   /* alternating section band      */
+
+  /* text — Forest Ink and two lighter steps */
+  --c-ink:           #1B2D24;   /* headings   (Forest Ink)       */
+  --c-ink-soft:      #4A5A50;   /* body copy                     */
+  --c-ink-faint:     #5E6C63;   /* captions, dates, meta         */
+
+  /* accent — Grow Teal */
+  --c-accent:        #2E6F63;   /* links, buttons, active nav    */
+  --c-accent-hover:  #1F5147;
+  --c-accent-tint:   #DDEAE5;   /* pale fill behind tags         */
+
+  /* Heritage Gold — used sparingly, for the focus ring and
+     anywhere you want a warm highlight. Too light for body text. */
+  --c-gold:          #8A6620;
+  --c-focus:         #B0873A;
+
+  /* lines */
+  --c-line:          #E2DACD;   /* hairline dividers             */
+  --c-line-strong:   #C9BDA9;   /* chip outlines                 */
+  --c-border-ui:     #8A8073;   /* buttons & inputs (needs 3:1)  */
+
+  /* CONTRAST — every pair above passes WCAG AA. If you change a
+     colour, re-check at webaim.org/resources/contrastchecker:
+     text needs 4.5 or higher, button and input borders 3.0.
+     --c-accent also sits behind white button text, so it can't
+     go pale. */
+
+
+  /* ---------- 3. TYPE SCALE --------------------------------- */
+
+  --fs-title:   clamp(3rem, 9vw, 6.5rem);       /* Work, About, Contact   */
+  --fs-hero:    clamp(2.4rem, 6vw, 4.25rem);    /* sentences, case titles */
+  --fs-h1:      var(--fs-title);
+
+  --fs-h2:      clamp(1.55rem, 3.2vw, 2.05rem);
+  --fs-h3:      clamp(1.14rem, 2.2vw, 1.35rem);
+  --fs-lead:    clamp(1.03rem, 1.8vw, 1.18rem);
+  --fs-body:    1rem;
+  --fs-small:   0.875rem;
+  --fs-micro:   0.8125rem;
+
+  /* Playfair has generous ascenders, so it needs more room than
+     a tightly-drawn display serif would. */
+  --lh-title:   1.02;
+  --lh-tight:   1.14;
+  --lh-snug:    1.34;
+  --lh-body:    1.68;   /* Lora is a serif — give it air */
+
+  --tracking-title: -0.015em;
+  --tracking-tight: -0.012em;
+  --tracking-wide:   0.08em;
+
+
+  /* ---------- 4. SPACING ------------------------------------ */
+
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  88px;
+
+  --section-y:   clamp(56px, 8vw, 104px);
+  --page-gutter: clamp(20px, 5vw, 40px);
+
+
+  /* ---------- 5. LAYOUT ------------------------------------- */
+
+  --w-page:     1160px;
+  --w-narrow:   700px;
+  --w-wide:     1320px;
+
+  --radius-btn:   8px;
+  --radius-chip:  999px;
+  --radius-sm:    6px;
+  --radius:       12px;
+  --radius-lg:    20px;
+
+  --shadow-card:  0 1px 2px rgba(27,45,36,.06);
+  --shadow-lift:  0 10px 30px -12px rgba(27,45,36,.22);
+
+  --header-h:   68px;
+}
+
+
+/* ---------- 6. DARK MODE (optional) ------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --c-bg:          #14201A;
+    --c-surface:     #1C2A23;
+    --c-surface-alt: #18241E;
+    --c-ink:         #EFEDE6;
+    --c-ink-soft:    #B6C2BA;
+    --c-ink-faint:   #9DAAA2;
+    --c-accent:      #7FBBAC;
+    --c-accent-hover:#A3D2C6;
+    --c-accent-tint: #22362F;
+    --c-gold:        #D4A857;
+    --c-line:        #2B3A33;
+    --c-line-strong: #3C4C44;
+    --c-border-ui:   #7E8C85;
+    --shadow-card:   0 1px 2px rgba(0,0,0,.4);
+    --shadow-lift:   0 10px 30px -12px rgba(0,0,0,.6);
+  }
+}

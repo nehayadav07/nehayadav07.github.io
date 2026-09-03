@@ -1,0 +1,4 @@
+# Static site. Nothing to build.
+[build]
+  command = ""
+  publish = "."
