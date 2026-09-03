@@ -29,11 +29,13 @@
 
 
 /* ---------- 1. FONTS --------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
 
 :root {
 
-  --font-title:   'Playfair Display', Georgia, serif;              /* big page titles     */
+  --font-title:   'Merriweather', Georgia, serif;                  /* big page titles     */
+  --fw-title:     300;                                             /* Light               */
+  --fs-title-style: italic;                                        /* only 300 italic is loaded */
   --font-display: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;  /* headings, UI, labels */
   --font-body:    'Lora', Georgia, serif;                          /* paragraphs          */
 
@@ -74,8 +76,8 @@
 
   /* ---------- 3. TYPE SCALE --------------------------------- */
 
-  --fs-title:   clamp(3rem, 9vw, 6.5rem);       /* Work, About, Contact   */
-  --fs-hero:    clamp(2.4rem, 6vw, 4.25rem);    /* sentences, case titles */
+  --fs-title:   clamp(2.6rem, 7.5vw, 5.4rem);   /* Work, About, Contact   */
+  --fs-hero:    clamp(2.1rem, 5vw, 3.6rem);     /* sentences, case titles */
   --fs-h1:      var(--fs-title);
 
   --fs-h2:      clamp(1.55rem, 3.2vw, 2.05rem);
@@ -85,14 +87,14 @@
   --fs-small:   0.875rem;
   --fs-micro:   0.8125rem;
 
-  /* Playfair has generous ascenders, so it needs more room than
-     a tightly-drawn display serif would. */
-  --lh-title:   1.02;
+  /* Merriweather has a tall x-height and short extenders, so tight
+     leading works. Italic already leans, so tracking stays near zero. */
+  --lh-title:   1.06;
   --lh-tight:   1.14;
   --lh-snug:    1.34;
   --lh-body:    1.68;   /* Lora is a serif — give it air */
 
-  --tracking-title: -0.015em;
+  --tracking-title: -0.005em;
   --tracking-tight: -0.012em;
   --tracking-wide:   0.08em;
 
