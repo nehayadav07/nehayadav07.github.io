@@ -1001,6 +1001,147 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 .case .cres{margin:8px 0 0;font-size:15px;color:var(--ink);max-width:48ch;padding:10px 12px;background:var(--marker-soft);border-radius:6px}
 .case .cres b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin-bottom:2px}
 </style>
+<style>
+/* ===== clean v3: more air, one project per row, smooth motion ===== */
+:root{--out:cubic-bezier(.16,1,.3,1)}
+.wrap{max-width:1080px}
+section{padding-block:clamp(80px,11vw,152px)}
+#work{padding-top:clamp(24px,4vw,48px)}
+.sec-head{border-top:0;padding-top:0;margin-bottom:clamp(44px,6vw,72px);gap:10px}
+.sec-head h2{font-size:clamp(30px,3.4vw,44px);font-weight:700;letter-spacing:-.03em}
+.sec-head p{font-size:17px}
+
+/* hero: text only, centred in space */
+.hero .wrap.hero-grid{display:block}
+.hero{padding-block:clamp(100px,15vw,190px) clamp(40px,6vw,80px)}
+.hero .hero-grid h1{font-size:clamp(46px,7vw,92px);line-height:1;letter-spacing:-.04em;max-width:13ch}
+.hero .lead{max-width:32em;margin-top:32px;color:var(--graphite)}
+.hero .lead b{color:var(--ink);font-weight:600}
+.hero .ctas{margin-top:44px}
+.open-pill{margin-bottom:28px}
+.proof-row{margin-top:clamp(64px,8vw,104px);gap:28px clamp(40px,6vw,80px)}
+.hero .brands{margin-top:clamp(48px,6vw,72px);padding-top:32px}
+.brands li{font-size:clamp(16px,1.6vw,19px);font-weight:600;color:#A6A8AD}
+
+/* selected work: one per row */
+.cases{grid-template-columns:1fr;gap:clamp(96px,12vw,160px)}
+.case{display:flex;flex-direction:column;gap:clamp(28px,3.5vw,44px)}
+.case .prev{min-height:0;border-radius:20px;padding:clamp(28px,6vw,80px);background:var(--tile)}
+.case .prev .cardshot{max-width:880px;margin:0 auto;border-radius:10px}
+.case .prev .ui{max-width:720px}
+.case .txt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px clamp(32px,6vw,88px);align-items:start}
+.case .ctl{display:flex;flex-direction:column;gap:10px}
+.case .ctr{display:flex;flex-direction:column;gap:14px;padding-top:24px}
+.case h3{font-size:clamp(26px,2.8vw,36px);letter-spacing:-.03em;line-height:1.12}
+.case h3 .tag{display:table;margin:14px 0 0;top:0}
+.case .crole{margin:4px 0 0}
+.case p{max-width:40ch}
+.case .cres{font-size:15px;color:var(--graphite);margin:0}
+.case .cres b{color:var(--ink);font-weight:600;margin-right:6px}
+.case .more{margin-top:8px}
+
+/* more work: one per row, image left, text right */
+.grid{grid-template-columns:1fr;gap:0}
+.mini{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-auto-rows:auto;column-gap:clamp(32px,6vw,80px);row-gap:10px;align-content:center;padding:clamp(36px,5vw,56px) 0;border-top:1px solid var(--line)}
+.mini:last-child{border-bottom:1px solid var(--line)}
+.mini .art{grid-column:1;grid-row:1 / span 4;align-self:center;margin:0;height:clamp(170px,20vw,230px);border-radius:14px}
+.mini>:not(.art){grid-column:2}
+.mini h3{font-size:clamp(20px,2vw,24px);align-self:end}
+.mini p{max-width:44ch}
+
+/* how I work: no boxes, just air */
+.hows{gap:clamp(40px,5vw,64px) clamp(28px,4vw,56px)}
+.hows>div{background:none;padding:22px 0 0;border-radius:0;border-top:1px solid var(--line)}
+.hows>div:hover{transform:none;box-shadow:none}
+.hows h3{font-size:19px}
+.lead0{margin-top:clamp(72px,9vw,120px);border-radius:24px;padding:clamp(32px,5vw,64px)}
+.phases{gap:clamp(24px,4vw,48px);margin-top:40px}
+
+/* about */
+.about p{margin-block:0 20px}
+.skills{margin-top:32px}
+
+/* smooth motion */
+@keyframes rise2{from{opacity:0;transform:translate3d(0,32px,0)}to{opacity:1;transform:none}}
+@keyframes imgin{from{opacity:0;transform:translate3d(0,48px,0) scale(.97)}}
+.rv.in{animation:rise2 1.2s var(--out) both}
+.hero .open-pill,.hero h1 .w,.hero .lead,.hero .ctas,.proof-row,.hero .brands{animation:rise2 1.2s var(--out) both}
+.hero h1 .w:nth-child(3){animation-delay:.08s}.hero h1 .w:nth-child(5){animation-delay:.16s}
+.hero .lead{animation-delay:.28s}.hero .ctas{animation-delay:.38s}.proof-row{animation-delay:.5s}.hero .brands{animation-delay:.6s}
+.hero h1 .hl::before{animation:mark 1.1s var(--out) .8s forwards}
+.cases .case:nth-child(even).in,.grid .mini:nth-child(even).in{animation-delay:0s}
+.case.in .cardshot,.case.in .prev .ui{animation:imgin 1.4s var(--out) .1s backwards}
+.case .prev{transition:background-color .8s var(--out)}
+.cardshot,.case .prev .ui{transition:transform .9s var(--out),box-shadow .9s var(--out)}
+.case:hover .cardshot,.case:hover .prev .ui{transform:translateY(-10px);box-shadow:0 2px 6px rgba(20,20,25,.05),0 48px 80px -40px rgba(20,20,25,.35)}
+.mini .art>*{transition:transform .9s var(--out)}
+a.mini:hover .art>*,.linkcard:hover .art>*{transform:scale(1.05)}
+.btn{transition:transform .5s var(--out),background .3s,box-shadow .5s var(--out)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(20,20,25,.35)}
+
+@media (max-width:760px){
+  .case .txt{grid-template-columns:1fr}
+  .case .ctr{padding-top:0}
+  .mini{grid-template-columns:1fr;row-gap:10px}
+  .mini .art{grid-row:auto;margin-bottom:12px}
+  .mini>:not(.art){grid-column:1}
+  .hows{grid-template-columns:1fr}
+}
+.case .cres{background:none;padding:0;border-radius:0;max-width:40ch;font-size:15px;color:var(--ink-2)}
+.case .cres b{display:inline;font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:600;margin-right:6px}
+/* wide screenshots fill the tile */
+.case .prev.has-shot{padding:clamp(16px,3vw,40px)}
+.case .prev .cardshot{width:100%;max-width:none;border-radius:10px}
+.mini .art .artshot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:inherit;transition:transform .9s var(--out)}
+
+/* ===== scroll reveal v2: parts arrive one after another ===== */
+@keyframes clipin{from{opacity:0;clip-path:inset(14% 4% 0 4% round 20px);transform:translate3d(0,40px,0)}to{opacity:1;clip-path:inset(0 0 0 0 round 20px);transform:none}}
+@keyframes clipin2{from{opacity:0;clip-path:inset(10% 0 0 0 round 14px);transform:translate3d(0,24px,0)}to{opacity:1;clip-path:inset(0 0 0 0 round 14px);transform:none}}
+html.js .case.rv,html.js .mini.rv,html.js .sec-head.rv,html.js .facts.rv{opacity:1;animation:none}
+html.js .case.rv:not(.in) .prev,html.js .case.rv:not(.in) .ctl>*,html.js .case.rv:not(.in) .ctr>*,
+html.js .mini.rv:not(.in)>*,html.js .sec-head.rv:not(.in)>*,html.js .facts.rv:not(.in)>div{opacity:0}
+.case.in .prev{animation:clipin 1.3s var(--out) both}
+.case.in .ctl>*,.case.in .ctr>*,.mini.in>:not(.art),.sec-head.in>*,.facts.in>div,.rv.in .skills .tag{animation:rise2 1s var(--out) both}
+.case.in .ctl>:nth-child(1){animation-delay:.25s}.case.in .ctl>:nth-child(2){animation-delay:.32s}.case.in .ctl>:nth-child(3){animation-delay:.39s}.case.in .ctl>:nth-child(4){animation-delay:.46s}
+.case.in .ctr>:nth-child(1){animation-delay:.4s}.case.in .ctr>:nth-child(2){animation-delay:.48s}.case.in .ctr>:nth-child(3){animation-delay:.56s}
+.mini.in .art{animation:clipin2 1.2s var(--out) both}
+.mini.in>:nth-child(2){animation-delay:.15s}.mini.in>:nth-child(3){animation-delay:.22s}.mini.in>:nth-child(4){animation-delay:.29s}.mini.in>:nth-child(5){animation-delay:.36s}
+.sec-head.in>:nth-child(2){animation-delay:.1s}
+.facts.in>div:nth-child(2){animation-delay:.06s}.facts.in>div:nth-child(3){animation-delay:.12s}.facts.in>div:nth-child(4){animation-delay:.18s}.facts.in>div:nth-child(5){animation-delay:.24s}.facts.in>div:nth-child(6){animation-delay:.3s}
+.rv.in .skills .tag:nth-child(2){animation-delay:.04s}.rv.in .skills .tag:nth-child(3){animation-delay:.08s}.rv.in .skills .tag:nth-child(4){animation-delay:.12s}.rv.in .skills .tag:nth-child(5){animation-delay:.16s}.rv.in .skills .tag:nth-child(6){animation-delay:.2s}.rv.in .skills .tag:nth-child(7){animation-delay:.24s}.rv.in .skills .tag:nth-child(8){animation-delay:.28s}
+.hows .rv:nth-child(2){animation-delay:.08s}.hows .rv:nth-child(3){animation-delay:.16s}.hows .rv:nth-child(4){animation-delay:.04s}.hows .rv:nth-child(5){animation-delay:.12s}.hows .rv:nth-child(6){animation-delay:.2s}
+
+/* scroll progress line */
+.progress{position:fixed;left:0;top:0;height:3px;width:100%;background:var(--marker);transform-origin:0 50%;transform:scaleX(var(--p,0));z-index:30;pointer-events:none}
+
+/* ===== hover: small and soft ===== */
+.case .prev{transition:background-color .8s var(--out),transform .9s var(--out)}
+.case:hover .prev{background-color:#EAEBEE;transform:scale(1.008)}
+.case h3{transition:transform .6s var(--out)}
+.case:hover h3{transform:translateX(4px)}
+.mini{transition:background-color .5s var(--out)}
+.mini>:not(.art){transition:transform .6s var(--out)}
+a.mini:hover>:not(.art),.linkcard:hover>:not(.art){transform:translateX(6px)}
+.mini .art{transition:box-shadow .8s var(--out)}
+a.mini:hover .art,.linkcard:hover .art{box-shadow:0 24px 48px -28px rgba(20,20,25,.35)}
+a.mini:hover .art .artshot,.linkcard:hover .art .artshot{transform:scale(1.04)}
+.mlink{display:inline-block}
+.hows>div{transition:border-color .5s var(--out)}
+.hows>div i{transition:color .5s var(--out)}
+.hows>div h3{transition:transform .6s var(--out)}
+.hows>div:hover{border-top-color:var(--ink)}
+.hows>div:hover h3{transform:translateX(4px)}
+.skills .tag{transition:background-color .3s,border-color .3s,color .3s}
+.skills .tag:hover{background:var(--marker-soft);border-color:var(--marker);color:var(--ink)}
+.ci{transition:transform .5s var(--out)}
+.ci:hover{transform:translateX(4px)}
+.proof-row div{transition:transform .5s var(--out)}
+.proof-row div:hover{transform:translateY(-3px)}
+.brands li{transition:color .3s}
+.brands li:hover{color:var(--ink)}
+@media (hover:none){.case:hover .prev,.case:hover h3,a.mini:hover>*,.hows>div:hover h3{transform:none}}
+
+</style>
 </head><body>
 <script>document.documentElement.classList.add("js")</script>
 <nav class="nav"><div class="wrap">
@@ -1014,9 +1155,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 <header class="hero" id="top"><div class="wrap hero-grid">
   <div class="hero-txt">
   <p class="open-pill"><i></i>Open to Lead / Principal roles · Remote</p>
-  <p class="role-line">Lead Product Designer <b>·</b> Enterprise SaaS, AI &amp; design systems</p>
   <h1><span class="w">I design the</span><br> <span class="w">screens people</span><br> <span class="w hl">make decisions on.</span></h1>
-  <p class="lead">15 years in enterprise software: contracts, security, workflows. Most recently, <b>a GenAI copilot shipped in Icertis 8.6</b> and <b>the risk console for AI agents at intentyx.ai</b>.</p>
+  <p class="lead">15 years designing enterprise software for contracts, security and workflows. Recently shipped <b>a GenAI copilot at Icertis</b> and <b>an AI-agent risk console at Intentyx</b>.</p>
   <div class="ctas">
     <a class="btn" href="#work">See the work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <a class="btn ghost" id="cv-btn" href="Neha-Yadav-Resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a>
@@ -1029,27 +1169,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div><dt>NID</dt><dd>iF Design Award</dd></div>
   </dl>
   </div>
-  <div class="scene" aria-hidden="true">
-    <div class="win">
-      <div class="wbar"><i></i><i></i><i></i><span>Master Services Agreement · Northwind Logistics</span></div>
-      <div class="wbody">
-        <div class="doc">
-          <b class="dt">2. Personnel</b>
-          <span class="dl w90"></span><span class="dl w75"></span>
-          <div class="clause"><span class="dl w95"></span><span class="dl w80"></span><span class="dl w55"></span></div>
-          <span class="dl w85"></span><span class="dl w70"></span><span class="dl w60"></span>
-        </div>
-        <div class="pane">
-          <div class="ai-tag">✦ AI-generated · review before creating</div>
-          <div class="rc r1"><b>Assign account manager</b><small>Within 10 business days</small><em>Art. 2.1 ↗</em></div>
-          <div class="rc r2"><b>Background checks</b><small>Before onboarding</small><em>Art. 2.3 ↗</em></div>
-          <div class="rc r3 warn"><b>Notice of personnel changes</b><small>▲ Needs review</small><em>Art. 2.5 ↗</em></div>
-          <div class="act"><span>2 accepted · 1 needs review</span><button type="button" tabindex="-1"><span class="l1">Create 2 obligations</span><span class="l2">✓ 2 created</span></button><i class="cur"></i></div>
-        </div>
-      </div>
-    </div>
-    <p class="scene-cap">AI proposes. A person checks the source. Then it becomes a record.</p>
-  </div>
   <div class="brands" aria-label="Companies I have designed for">
     <span class="bl">Designed for</span>
     <ul><li>Icertis</li><li>Intentyx</li><li>Samsung</li><li>Symantec</li><li>TweenCraft</li><li>Veritas</li></ul>
@@ -1057,66 +1176,30 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 </div></header>
 
 <section id="work"><div class="wrap">
-  <div class="sec-head rv"><h2>Selected work</h2><p>Four case studies. Each one shows the problem, the decisions I made, and what shipped.</p></div>
+  <div class="sec-head rv"><h2>Selected work</h2><p>The problem, the decisions, what shipped.</p></div>
   <div class="cases">
 
     <a class="case rv" href="#copilot" style="--tint:var(--t-blue)">
-      <div class="txt">
-        <div class="eyebrow">Icertis <b>·</b> GenAI</div>
-        <h3>Obligation Copilot <span class="tag ship">Shipped · Icertis 8.6</span></h3>
-        <p>A 60-page contract becomes a reviewed list of obligations, each traced to its source clause.</p>
-        <p class="crole">Lead product designer · 2023–24</p>
-        <ul class="cdid"><li>Linked every AI answer to its source clause, so checking one takes one click</li><li>Designed the review gate: AI proposes, the contract manager approves, then bulk create</li><li>Replaced the empty chat box with guided prompts and context chips</li></ul>
-        <p class="cres"><b>Result</b> Shipped in Icertis 8.6 (Jul 2024). 0 records created without human approval.</p>
-        
-        <div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </div>
-      <div class="prev has-shot"><img class="cardshot" src="images/m-8ee6f399e3.webp" alt="Obligation Copilot panel with extracted obligations" loading="lazy"></div>
+      <div class="txt"><div class="ctl"><div class="eyebrow">Icertis <b>·</b> GenAI</div><h3>Obligation Copilot <span class="tag ship">Shipped · Icertis 8.6</span></h3><p class="crole">Lead product designer · 2023–24</p></div><div class="ctr"><p>A 60-page contract becomes a reviewed list of obligations, each traced to its source clause.</p><p class="cres"><b>Result</b> Shipped in Icertis 8.6 (Jul 2024). 0 records created without human approval.</p><div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></div>
+      <div class="prev has-shot"><img class="cardshot" src="https://nehayadav07.github.io/images/m-9a9e91abcc.webp" alt="Obligation Copilot panel with extracted obligations" loading="lazy"></div>
     </a>
 
     <a class="case rv" href="#smare" style="--tint:var(--t-peach)">
-      <div class="txt">
-        <div class="eyebrow">Intentyx <b>·</b> Agentic AI security</div>
-        <h3>Risk intelligence for AI agents <span class="tag ship">Live · intentyx.ai</span></h3>
-        <p>A security console that tells a security lead, in plain questions, whether their AI agents made them more exposed.</p>
-        <p class="crole">Sole designer, with 2 founders, no PM · 2025–26</p>
-        <ul class="cdid"><li>Built a dashboard around 6 questions a security lead asks, not a wall of charts</li><li>Designed a 4-level drill-down: org → agent → run → step, with a live topology</li><li>Created the dark-first design system and the marketing site</li></ul>
-        <p class="cres"><b>Result</b> Console, system and site live at intentyx.ai. One designer, end to end.</p>
-        
-        <div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </div>
-      <div class="prev has-shot"><img class="cardshot" src="images/m-958fd56f0c.webp" alt="SMARE dashboard" loading="lazy"></div>
+      <div class="txt"><div class="ctl"><div class="eyebrow">Intentyx <b>·</b> Agentic AI security</div><h3>Risk intelligence for AI agents <span class="tag ship">Live · intentyx.ai</span></h3><p class="crole">Sole designer, with 2 founders, no PM · 2025–26</p></div><div class="ctr"><p>A security console that tells a security lead, in plain questions, whether their AI agents made them more exposed.</p><p class="cres"><b>Result</b> Console, system and site live at intentyx.ai. One designer, end to end.</p><div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></div>
+      <div class="prev has-shot"><img class="cardshot" src="https://nehayadav07.github.io/images/m-92f1fe7924.webp" alt="SMARE dashboard" loading="lazy"></div>
     </a>
 
     <a class="case rv" href="#bpm" style="--tint:var(--t-yellow)">
-      <div class="txt">
-        <div class="eyebrow">Icertis <b>·</b> Enterprise workflow</div>
-        <h3>Business Process Designer <span class="tag ship">In the GovCon solution</span></h3>
-        <p>A no-code builder for contract processes, and a tracker that shows where every deal stands.</p>
-        <p class="crole">Product designer · Oct 2022 – Apr 2023</p>
-        <ul class="cdid"><li>Modelled processes in 3 levels: stage, step, sub-step, with parallel, conditional and repeating logic</li><li>Made the end-user tracker read the same model, so nothing is learned twice</li><li>Rebuilt status as 5 states with icon + colour after colour-only failed</li></ul>
-        <p class="cres"><b>Result</b> Powers the process modules in Icertis GovCon (Sep 2023), a significant revenue line.</p>
-        
-        <div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </div>
-      <div class="prev has-shot"><img class="cardshot" src="images/m-917643ce14.webp" alt="Business Process Designer builder" loading="lazy"></div>
+      <div class="txt"><div class="ctl"><div class="eyebrow">Icertis <b>·</b> Enterprise workflow</div><h3>Business Process Designer <span class="tag ship">In the GovCon solution</span></h3><p class="crole">Product designer · Oct 2022 – Apr 2023</p></div><div class="ctr"><p>A no-code builder for contract processes, and a tracker that shows where every deal stands.</p><p class="cres"><b>Result</b> Powers the process modules in Icertis GovCon (Sep 2023), a significant revenue line.</p><div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></div>
+      <div class="prev has-shot"><img class="cardshot" src="https://nehayadav07.github.io/images/m-0ab47a5585.webp" alt="Business Process Designer builder" loading="lazy"></div>
     </a>
 
     <a class="case rv" href="#ds">
-      <div class="txt">
-        <div class="eyebrow">Design systems <b>·</b> AI workflows</div>
-        <h3>How I build design systems for AI workflows <span class="tag ship">3 systems in production</span></h3>
-        <p>One source feeds every product: change a value once and it updates everywhere.</p>
-        <p class="crole">Design system owner · Icertis, Intentyx, TweenCraft</p>
-        <ul class="cdid"><li>Set up three token layers: raw values → named intents → components</li><li>Shipped light, dark and high-contrast modes from the same names</li><li>Added an AI pattern layer: AI label, source link, review card, progress</li></ul>
-        <p class="cres"><b>Result</b> 3 systems in production, 25+ components in ACE. A new brand is a new mode, not a redesign.</p>
-        
-        <div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </div>
+      <div class="txt"><div class="ctl"><div class="eyebrow">Design systems <b>·</b> AI workflows</div><h3>How I build design systems for AI workflows <span class="tag ship">3 systems in production</span></h3><p class="crole">Design system owner · Icertis, Intentyx, TweenCraft</p></div><div class="ctr"><p>One source feeds every product: change a value once and it updates everywhere.</p><p class="cres"><b>Result</b> 3 systems in production, 25+ components in ACE. A new brand is a new mode, not a redesign.</p><div class="more"><span class="ul">Read case study · 3 min</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></div>
       <div class="prev"><div class="ui dsprev">
         <div class="bar"><i></i><i></i><b>Design systems</b><span>· 3 products</span></div>
         <div class="dsgrid">
-          <div class="sys"><b>ACE</b><span>Icertis</span><div class="sws"><i style="background:#1F5FA8"></i><i style="background:#5B2E9E"></i><i style="background:#D1E8FA"></i><i style="background:#15181B"></i></div><div class="btns"><em style="background:#1F5FA8;color:#fff">Save</em><em>Cancel</em></div><div class="ty">Aa <small>Light · Dark · High contrast</small></div></div>
+          <div class="sys"><b>ACE</b><span>Icertis</span><div class="sws"><i style="background:#1F5FA8"></i><i style="background:#5B2E9E"></i><i style="background:#D1E8FA"></i><i style="background:#15181B"></i></div><div class="btns"><em style="background:#1F5FA8;color:#fff">Save</em><em>Cancel</em></div><div class="ty">Aa <small>Light · Dark</small></div></div>
           <div class="sys dk"><b>SMARE</b><span>Intentyx</span><div class="sws"><i style="background:#7C5CFF"></i><i style="background:#E8867A"></i><i style="background:#F4B740"></i><i style="background:#3FB7A6"></i></div><div class="btns"><em style="background:#7C5CFF;color:#fff">Investigate</em><em>Dismiss</em></div><div class="ty">Aa <small>Dark-first · Inter</small></div></div>
           <div class="sys"><b>TweenCraft</b><span>Kalpkriti</span><div class="sws"><i style="background:#FF7A59"></i><i style="background:#FFC93C"></i><i style="background:#2EC4B6"></i><i style="background:#6C4AB6"></i></div><div class="btns"><em style="background:#FF7A59;color:#fff;border-radius:999px">Record</em><em style="border-radius:999px">Share</em></div><div class="ty">Aa <small>Playful · mobile</small></div></div>
         </div>
@@ -1127,44 +1210,32 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 </div></section>
 
 <section id="more"><div class="wrap">
-  <div class="sec-head rv"><h2>More work</h2><p>Shorter case studies. One problem, what I did, what came of it.</p></div>
+  <div class="sec-head rv"><h2>More work</h2><p>Shorter reads.</p></div>
   <div class="grid">
-    <a class="mini rv" href="#workbench"><div class="art"><div class="tree">
-      <i style="left:calc(50% - 6px);top:12px"></i>
-      <b style="left:50%;top:24px;width:1px;height:16px"></b>
-      <b style="left:25%;top:40px;width:50%"></b>
-      <b style="left:25%;top:40px;width:1px;height:14px"></b><b style="left:75%;top:40px;width:1px;height:14px"></b>
-      <i style="left:calc(25% - 6px);top:54px;background:var(--marker)"></i><i style="left:calc(75% - 6px);top:54px"></i>
-      <b style="left:75%;top:66px;width:1px;height:12px"></b><i style="left:calc(75% - 6px);top:78px;background:var(--graphite)"></i>
-    </div></div><h3>Obligation Workbench <span class="tag mt">Concept</span></h3><p>A persona workbench that ties obligations to the KPIs they move, and chains them so a late task shows what it holds up.</p><div class="proof">Icertis · 2023</div><span class="mlink"><span class="ul">Read case study</span> →</span></a>
-    <a class="mini rv" href="#xarth"><div class="art"><div class="pipe"><i></i><i></i><i></i><i></i><i></i></div></div><h3>Xarth <span class="tag mt">Live</span></h3><p>An internal deal platform that tracks every loan from prospect to funded, across clients, lenders and advisors.</p><div class="proof">Arth Consulting</div><span class="mlink"><span class="ul">Read case study</span> →</span></a>
+    <a class="mini rv" href="#workbench"><div class="art"><img class="artshot" src="https://nehayadav07.github.io/images/m-6b220ae584.webp" alt="Obligation Workbench dashboard" loading="lazy"></div><h3>Obligation Workbench <span class="tag mt">Concept</span></h3><p>A persona workbench that ties obligations to the KPIs they move, and chains them so a late task shows what it holds up.</p><div class="proof">Icertis · 2023</div><span class="mlink"><span class="ul">Read case study</span> →</span></a>
+    <a class="mini rv" href="#xarth"><div class="art"><img class="artshot" src="https://nehayadav07.github.io/images/m-927cd1df44.webp" alt="Xarth deals table" loading="lazy"></div><h3>Xarth <span class="tag mt">Live</span></h3><p>An internal deal platform that tracks every loan from prospect to funded, across clients, lenders and advisors.</p><div class="proof">Arth Consulting</div><span class="mlink"><span class="ul">Read case study</span> →</span></a>
     <a class="mini rv" href="#tweencraft"><div class="art"><div class="frames"><i style="height:40%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:90%"></i><i style="height:62%"></i></div></div><h3>TweenCraft <span class="tag mt">10M+ downloads</span></h3><p>Create-and-share flows for a cartoon movie maker: editor, voice recording, character store and feed.</p><div class="proof">Kalpkriti · Google Play</div><span class="mlink"><span class="ul">Read case study</span> →</span></a>
-    <div class="mini rv vs linkcard"><div class="art"><div class="vsa">
-      <div class="vc"><i style="background:#FFD9C2">🪥</i><span>Brush</span><small>ब्रश</small></div><em>→</em>
-      <div class="vc"><i style="background:#D6E8FF">👕</i><span>Dress</span><small>कपड़े</small></div><em>→</em>
-      <div class="vc"><i style="background:#DDF3D8">🥣</i><span>Eat</span><small>खाना</small></div><em>→</em>
-      <div class="vc"><i style="background:#FFF1B8">🎒</i><span>School</span><small>स्कूल</small></div>
-    </div></div><h3><a class="stretch" href="#vs">Visual Schedules</a> <span class="tag mt">Live</span></h3><p>A bilingual Hindi–English visual schedule maker for autistic and neurodiverse children. My own product: I designed it and built it end to end, with AI helping on the code and backend.</p><div class="proof"><a class="plink" href="https://visualschedule.app" target="_blank" rel="noopener">visualschedule.app ↗</a> · Founder</div><span class="mlink"><span class="ul">Read case study</span> →</span></div>
+    <div class="mini rv vs linkcard"><div class="art"><img class="artshot" src="https://nehayadav07.github.io/images/visual-schedules-app.webp" alt="Visual Schedules app: picking routine cards and building a daily schedule" loading="lazy"></div><h3><a class="stretch" href="#vs">Visual Schedules</a> <span class="tag mt">Live</span></h3><p>A bilingual Hindi–English visual schedule maker for neurodiverse children. My own product, designed and built end to end.</p><div class="proof"><a class="plink" href="https://visualschedule.app" target="_blank" rel="noopener">visualschedule.app ↗</a> · Founder</div><span class="mlink"><span class="ul">Read case study</span> →</span></div>
   </div>
 </div></section>
 
 <section id="how"><div class="wrap">
-  <div class="sec-head rv"><h2>How I work</h2><p>What it is like to have me lead design on your product, from the first conversation to the shipped build.</p></div>
+  <div class="sec-head rv"><h2>How I work</h2><p>From the first conversation to the shipped build.</p></div>
   <div class="hows">
-    <div class="rv"><i>01</i><h3>Start with the question, not the screen</h3><p>Every project opens with the question the user brings: "is my setup healthy?", "where is this deal stuck?", "what do I do now?". I write it down with the founders or the PM before any flow exists. It becomes the test for every decision after.</p></div>
-    <div class="rv"><i>02</i><h3>One workspace, no handoff</h3><p>Library, specs, open questions and feedback all live in Figma. Engineers inspect in Dev Mode and comment on the exact component they are building. Nobody works from an outdated version, and nothing gets lost in a chat thread.</p></div>
-    <div class="rv"><i>03</i><h3>Write it so engineering can build without me</h3><p>Specs sit beside the design: widths, collapse rules, truncation, every state. At Intentyx I wrote both a plain-language cheat sheet and the formal spec for the dev team. Fewer review rounds, fewer surprises in the build.</p></div>
-    <div class="rv"><i>04</i><h3>Show the trade-off</h3><p>Every decision in these case studies has a trade-off next to it, because that is how I present it in the room. People can argue with a trade-off and we get somewhere. Nobody can argue with "trust me".</p></div>
-    <div class="rv"><i>05</i><h3>Say the hard thing early</h3><p>The colour-only status on the Business Process tracker. The contrast failure in SMARE's first dark build. I flag my own misses first, in front of the team, and the fix goes into the system so it cannot happen again.</p></div>
-    <div class="rv"><i>06</i><h3>Build so others can move</h3><p>Tokens, modes and AI patterns exist so a new designer or engineer can ship a consistent workflow without me in the loop. Leading design means making yourself less necessary, one pattern at a time.</p></div>
+    <div class="rv"><i>01</i><h3>Start with the question, not the screen</h3><p>I write down the question the user brings before any flow exists. It becomes the test for every decision.</p></div>
+    <div class="rv"><i>02</i><h3>One workspace, no handoff</h3><p>Library, specs and feedback live in Figma. Engineers build from Dev Mode, never from an old version.</p></div>
+    <div class="rv"><i>03</i><h3>Write it so engineering can build without me</h3><p>Every state, width and truncation rule sits beside the design. Fewer review rounds, fewer surprises.</p></div>
+    <div class="rv"><i>04</i><h3>Show the trade-off</h3><p>Every decision comes with its trade-off, so the room can argue with it and move forward.</p></div>
+    <div class="rv"><i>05</i><h3>Say the hard thing early</h3><p>I flag my own misses first, and the fix goes into the system so it can't happen again.</p></div>
+    <div class="rv"><i>06</i><h3>Build so others can move</h3><p>Tokens, modes and AI patterns let others ship consistent work without me in the loop.</p></div>
   </div>
 
   <div class="lead0 rv">
-    <div class="lead0-head"><div class="eyebrow">Leading UX from scratch</div><h3>The shape I use when there is no design yet, no system, and no PM.</h3><p>This is how I started at Intentyx with two founders and an engineering team, and how I built my own product. The weeks move; the order does not.</p></div>
+    <div class="lead0-head"><div class="eyebrow">Leading UX from scratch</div><h3>The shape I use when there is no design yet, no system, and no PM.</h3><p>How I started at Intentyx, with two founders and no PM.</p></div>
     <div class="phases">
-      <div><small>Weeks 1–2</small><b>Listen and map</b><p>Sit with founders, sales calls and support. Write down the questions users bring. Audit what exists: screens, data, decisions already made.</p></div>
-      <div><small>Weeks 3–6</small><b>Foundations and first flow</b><p>Design principles the team can quote. Variables, modes and the first components. One end-to-end flow, specced, with a weekly critique engineering actually attends.</p></div>
-      <div><small>Weeks 7–12</small><b>Ship, measure, repeat</b><p>First flow live. Patterns published to the library with specs. A review rhythm that runs without me chasing it. Agree what we measure next.</p></div>
+      <div><small>Weeks 1–2</small><b>Listen and map</b><p>Founders, sales calls, support. Map the questions users bring and what already exists.</p></div>
+      <div><small>Weeks 3–6</small><b>Foundations and first flow</b><p>Principles, tokens, first components, and one end-to-end flow, fully specced.</p></div>
+      <div><small>Weeks 7–12</small><b>Ship, measure, repeat</b><p>First flow live, patterns in the library, and a review rhythm that runs itself.</p></div>
     </div>
   </div>
 </div></section>
@@ -1174,10 +1245,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <div class="about">
     <div class="rv">
       <p class="big">I'm Neha. For fifteen years I've designed the parts of enterprise software where someone has to get it right: <em>contracts, security consoles, workflow builders, loan pipelines</em>.</p>
-      <p style="color:var(--ink-2);max-width:60ch">Lately that has meant AI: a copilot that reads contracts, a console that watches autonomous agents. The question has not changed. Can the person on the other side of the screen see what is true and act on it?</p>
-      <p style="color:var(--ink-2);max-width:60ch">I have led design from scratch with founders and engineers and no PM, and inside large product organisations with many. I set direction, build the design system, write the specs, and stay in the room until it ships. I am direct in reviews and I expect the same back.</p>
-      <p style="color:var(--ink-2);max-width:60ch">Outside work I run Grow Gently, a small studio making bilingual tools for neurodiverse children. I designed and built Visual Schedules myself, with AI as a coding partner, which changed how I prototype.</p>
-      <div class="skills"><span class="tag">AI &amp; copilot UX</span><span class="tag">Design systems</span><span class="tag">Enterprise B2B</span><span class="tag">0 → 1 product design</span><span class="tag">Complex workflows</span><span class="tag">Data-dense UI</span><span class="tag">Dev handoff &amp; specs</span><span class="tag">Design critique</span><span class="tag">Stakeholder alignment</span><span class="tag">User research</span><span class="tag">Usability testing</span><span class="tag">Accessibility</span><span class="tag">Figma variables &amp; Dev Mode</span><span class="tag">AI-assisted prototyping</span></div>
+      <p style="color:var(--ink-2);max-width:56ch">Lately that means AI: a copilot that reads contracts, a console that watches autonomous agents. I set direction, build the system, write the specs and stay until it ships. Outside work I run Grow Gently, bilingual tools for neurodiverse children.</p>
+      <div class="skills"><span class="tag">AI &amp; copilot UX</span><span class="tag">Design systems</span><span class="tag">Enterprise B2B</span><span class="tag">0 → 1 product design</span><span class="tag">Complex workflows</span><span class="tag">Data-dense UI</span><span class="tag">Dev handoff &amp; specs</span><span class="tag">User research</span></div>
     </div>
     <div class="facts rv">
       <div><span>Experience</span>15 years in product and UX design</div>
@@ -1197,7 +1266,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <ul class="clinks">
       <li><a class="ci" href="mailto:neha.yadav07@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span id="em">neha.yadav07@gmail.com</span></a><button id="copy" class="cbtn" type="button" aria-label="Copy email address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="tip" aria-live="polite"></span></button></li>
       <li class="cv-link"><a class="ci" href="Neha-Yadav-Resume.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span>Résumé (PDF)</span></a></li>
-      <li><a class="ci" href="https://in.linkedin.com/in/neha-yadav-841a889" target="_blank" rel="noopener"><img loading="lazy" decoding="async" class="li" src="images/m-448f0b580c.png" alt="" width="18" height="18"><span>LinkedIn</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+      <li><a class="ci" href="https://in.linkedin.com/in/neha-yadav-841a889" target="_blank" rel="noopener"><img loading="lazy" decoding="async" class="li" src="https://nehayadav07.github.io/images/m-448f0b580c.png" alt="" width="18" height="18"><span>LinkedIn</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
     </ul>
   </div>
   <footer><blockquote class="quote">“I have found that all ugly things are made by those who strive to make something beautiful, and that all beautiful things are made by those who strive to make something useful.”<cite>Oscar Wilde</cite></blockquote><span>© 2026 Neha Yadav</span></footer>
@@ -1216,7 +1285,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div><span>Platform</span>Web · GenAI</div>
     <div><span>Status</span>Shipped in Icertis 8.6</div>
   </div>
-  <div class="hero-fig has-shot"><img class="shot" src="images/m-9a9e91abcc.webp" alt="Obligation Copilot: review extracted obligations beside the source clause" loading="lazy"></div>
+  <div class="hero-fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-9a9e91abcc.webp" alt="Obligation Copilot: review extracted obligations beside the source clause" loading="lazy"></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -1256,7 +1325,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>This turned "is the AI right?" into a one-click check, and it gave the legal team the audit trail they needed to sign off.</p>
       <div class="tradeoff">Trade-off: the split view costs horizontal space. Early versions cut the obligations table in half; I rebalanced it to 60/40 and made the document a focused clause preview.</div>
     </div>
-    <div class="fig has-shot"><img class="shot" src="images/m-9e23b855b1.webp" alt="Source clause panel highlighting the clause linked to the selected obligation" loading="lazy"></div>
+    <div class="fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-9e23b855b1.webp" alt="Source clause panel highlighting the clause linked to the selected obligation" loading="lazy"></div>
   </div>
 
   <div class="decision">
@@ -1267,7 +1336,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>The alternative, auto-creating everything and letting people delete mistakes, was faster on paper. In testing it produced clean-up work and eroded trust after the first wrong record.</p>
       <div class="tradeoff">Trade-off: one more step per contract. Worth it: the step is where the value of the review lives.</div>
     </div>
-    <div class="fig has-shot"><img class="shot" src="images/m-0d1309f3d9.webp" alt="Three obligations created, each marked Created, two left to review" loading="lazy"></div>
+    <div class="fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-0d1309f3d9.webp" alt="Three obligations created, each marked Created, two left to review" loading="lazy"></div>
   </div>
 
   <div class="dg-wrap flowbox" style="margin-top:20px"><div class="dg-title">Where AI stops and the person decides <span>the contract manager checks every row against its clause before anything is created</span></div><div class="flow-scroll"><svg class="flow-svg" viewBox="0 0 1000 290" role="img" aria-label="AI proposes, a person decides: ask, chips add context, AI extracts with clause reference, the contract manager checks each row against its clause, deselects wrong ones or re-asks, and only selected rows are created." font-family="DM Sans, Helvetica Neue, Arial, sans-serif"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a92ad"/></marker><marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5B2E9E"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs><path d="M160,138.0 C190,138.0 160,138.0 190,138.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
@@ -1311,7 +1380,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>Free-form questions stay available underneath. Admins can add and edit prompts, which is what shipped as customizable user prompts in 8.6.</p>
       <div class="tradeoff">Trade-off: prompt cards limit discovery of what else the model can do. We accepted that for a first release aimed at a repeatable task.</div>
     </div>
-    <div class="fig has-shot"><img class="shot" src="images/m-f92f99c899.webp" alt="Guided prompt cards shown when the copilot opens" loading="lazy"></div>
+    <div class="fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-f92f99c899.webp" alt="Guided prompt cards shown when the copilot opens" loading="lazy"></div>
   </div>
 
   <article>
@@ -1340,7 +1409,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div class="prose"><p class="lede">From an open contract to created obligations, in five screens. Hover to pause, or pick a step.</p></div>
   </article>
   <div class="player" aria-label="Obligation Copilot flow, five steps" aria-roledescription="carousel">
-    <div class="pstage"><img loading="lazy" decoding="async" class="pf on" src="images/m-c87109fa8a.webp" alt="Start: guided prompt cards" ><img loading="lazy" decoding="async" class="pf" src="images/m-f10fce025c.webp" alt="Extracting: rows streaming in with a progress bar" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="images/m-9a9e91abcc.webp" alt="Review: obligations with source clause highlighted" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="images/m-7d734d176f.webp" alt="Created: three obligations marked Created" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="images/m-1acc371030.webp" alt="Prompt library drawer for admins" aria-hidden="true"><button type="button" class="ptoggle" aria-label="Pause animation">Pause</button></div>
+    <div class="pstage"><img loading="lazy" decoding="async" class="pf on" src="https://nehayadav07.github.io/images/m-c87109fa8a.webp" alt="Start: guided prompt cards" ><img loading="lazy" decoding="async" class="pf" src="https://nehayadav07.github.io/images/m-f10fce025c.webp" alt="Extracting: rows streaming in with a progress bar" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="https://nehayadav07.github.io/images/m-9a9e91abcc.webp" alt="Review: obligations with source clause highlighted" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="https://nehayadav07.github.io/images/m-7d734d176f.webp" alt="Created: three obligations marked Created" aria-hidden="true"><img loading="lazy" decoding="async" class="pf" src="https://nehayadav07.github.io/images/m-1acc371030.webp" alt="Prompt library drawer for admins" aria-hidden="true"><button type="button" class="ptoggle" aria-label="Pause animation">Pause</button></div>
     <ol class="psteps"><li><button type="button" class="pstep on" data-i="0" aria-label="Step 01: Start"><span class="pbar"><i></i></span><b><em>01</em> Start</b><small>Guided prompts instead of an empty chat box. Each card shows what it will extract.</small></button></li><li><button type="button" class="pstep" data-i="1" aria-label="Step 02: Extract"><span class="pbar"><i></i></span><b><em>02</em> Extract</b><small>Rows stream in as they are found, so review starts before extraction ends.</small></button></li><li><button type="button" class="pstep" data-i="2" aria-label="Step 03: Review"><span class="pbar"><i></i></span><b><em>03</em> Review</b><small>Every obligation links to its clause. Nothing is a record until a person selects it.</small></button></li><li><button type="button" class="pstep" data-i="3" aria-label="Step 04: Create"><span class="pbar"><i></i></span><b><em>04</em> Create</b><small>Only the selected obligations become records, still linked to their source.</small></button></li><li><button type="button" class="pstep" data-i="4" aria-label="Step 05: Curate"><span class="pbar"><i></i></span><b><em>05</em> Curate</b><small>Admins choose the prompts their teams see, and can switch one off without deleting it.</small></button></li></ol>
     <p class="pcap" aria-live="polite"></p>
   </div>
@@ -1365,7 +1434,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>The shipped version proved the idea. Looking back, the real job isn’t asking questions. It’s reviewing what the AI found. V2 is designed around that.</p>
     </div>
   </article>
-  <div class="v2fig"><img src="images/m-39e29240c2.webp" alt="V2 concept: the contract as the main surface, Obligation Copilot as a side panel with persona tabs, accept and reject on each card, a needs-review flag, and numbered annotations" loading="lazy"></div>
+  <div class="v2fig"><img src="https://nehayadav07.github.io/images/m-39e29240c2.webp" alt="V2 concept: the contract as the main surface, Obligation Copilot as a side panel with persona tabs, accept and reject on each card, a needs-review flag, and numbered annotations" loading="lazy"></div>
   <div class="v2notes"><div class="v2n"><i>1</i><h3>Contract first, Copilot on the side</h3><p>The agreement is the main surface. The Copilot becomes a collapsible panel instead of a competing half-screen.</p></div><div class="v2n"><i>2</i><h3>Persona tabs with counts</h3><p>Each owner’s obligations are one tap away. Grouping by role becomes navigation.</p></div><div class="v2n"><i>3</i><h3>Two-way clause links</h3><p>Hover a card and its clause lights up in the contract; click to jump. Verifying takes a glance.</p></div><div class="v2n"><i>4</i><h3>Review states, not rows</h3><p>Accept, reject, needs review. Low-confidence items are flagged so reviewers know where to look first.</p></div><div class="v2n"><i>5</i><h3>Create what was approved</h3><p>“Create 2 obligations” reflects exactly what the reviewer accepted, with progress across all personas.</p></div><div class="v2n"><i>6</i><h3>Composer with toggles</h3><p>Augmentation and card view stay one tap away; prompt list and settings collapse into icons.</p></div></div>
   <p class="v2foot">Concept exploration, not shipped. Built to show how I’d evolve the product with what I know now.</p>
 
@@ -1392,7 +1461,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div><span>Platform</span>Web console · dark-first</div>
     <div><span>Status</span>Live at intentyx.ai</div>
   </div>
-  <div class="hero-fig has-shot"><img class="shot" src="images/m-92f1fe7924.webp" alt="SMARE dashboard: Organization posture and direction" loading="lazy"></div>
+  <div class="hero-fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-92f1fe7924.webp" alt="SMARE dashboard: Organization posture and direction" loading="lazy"></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -1446,7 +1515,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>Charts support the sentence. The page reads top to bottom like a briefing, with an "on this page" rail for jumping.</p>
       <div class="tradeoff">Trade-off: it is longer than a grid. For a tool opened once a day to decide what to do, reading order beat density.</div>
     </div>
-    <div class="fig annfig"><div class="ann"><img src="images/m-1ef4117b39.webp" alt="SMARE dashboard, annotated" loading="lazy"><i class="pin" style="left:9.0%;top:16.0%">1</i><i class="pin" style="left:61.0%;top:23.7%">2</i><i class="pin" style="left:43.5%;top:30.4%">3</i><i class="pin" style="left:61.5%;top:39.0%">4</i><i class="pin" style="left:79.0%;top:14.6%">5</i><i class="pin" style="left:9.4%;top:87.6%">6</i></div><ol class="annleg"><li><b>1</b>The question a security lead asks, as the section heading</li><li><b>2</b>The answer in one sentence, before any chart</li><li><b>3</b>Red rationed: one level, one score, nothing else</li><li><b>4</b>Events numbered on the trend, so spikes have a cause</li><li><b>5</b>“On this page” rail: the six questions, in order</li><li><b>6</b>Drivers ranked, each with its change and its cause</li></ol></div>
+    <div class="fig annfig"><div class="ann"><img src="https://nehayadav07.github.io/images/m-1ef4117b39.webp" alt="SMARE dashboard, annotated" loading="lazy"><i class="pin" style="left:9.0%;top:16.0%">1</i><i class="pin" style="left:61.0%;top:23.7%">2</i><i class="pin" style="left:43.5%;top:30.4%">3</i><i class="pin" style="left:61.5%;top:39.0%">4</i><i class="pin" style="left:79.0%;top:14.6%">5</i><i class="pin" style="left:9.4%;top:87.6%">6</i></div><ol class="annleg"><li><b>1</b>The question a security lead asks, as the section heading</li><li><b>2</b>The answer in one sentence, before any chart</li><li><b>3</b>Red rationed: one level, one score, nothing else</li><li><b>4</b>Events numbered on the trend, so spikes have a cause</li><li><b>5</b>“On this page” rail: the six questions, in order</li><li><b>6</b>Drivers ranked, each with its change and its cause</li></ol></div>
   </div>
 
   <div class="decision">
@@ -1458,7 +1527,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <div class="applied">Progressive disclosure · Signal over noise · Act in context</div>
       <div class="tradeoff">No screenshots survive of the old table, so the "before" is a recreated wireframe.</div>
     </div>
-    <div class="fig has-shot" style="flex-direction:column;align-items:stretch;gap:10px"><img class="shot" src="images/m-4443bfb5d6.webp" alt="Integrations before: recreated wireframe of the flat table" loading="lazy"><small style="font-size:12px;color:var(--graphite)">Before · recreated wireframe</small><img class="shot" src="images/m-1e1ee02693.webp" alt="Integrations after: health cards and provider rows" loading="lazy"><small style="font-size:12px;color:var(--graphite)">After · health first, grouped by provider</small></div>
+    <div class="fig has-shot" style="flex-direction:column;align-items:stretch;gap:10px"><img class="shot" src="https://nehayadav07.github.io/images/m-4443bfb5d6.webp" alt="Integrations before: recreated wireframe of the flat table" loading="lazy"><small style="font-size:12px;color:var(--graphite)">Before · recreated wireframe</small><img class="shot" src="https://nehayadav07.github.io/images/m-1e1ee02693.webp" alt="Integrations after: health cards and provider rows" loading="lazy"><small style="font-size:12px;color:var(--graphite)">After · health first, grouped by provider</small></div>
   </div>
 
   <div class="decision">
@@ -1470,7 +1539,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <div class="applied">Built for scale · Signal over noise</div>
       <div class="tradeoff">Result: "which agents expose sensitive data in Prod?" takes a couple of clicks, at 74 agents or 7,000.</div>
     </div>
-    <div class="fig has-shot"><img class="shot" src="images/m-b254f6c7ac.webp" alt="Agents inventory with insight cards and column filters" loading="lazy"></div>
+    <div class="fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-b254f6c7ac.webp" alt="Agents inventory with insight cards and column filters" loading="lazy"></div>
   </div>
 
   <div class="decision">
@@ -1481,7 +1550,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>This made abstract risk concrete. "Payment agent → reasons with → GPT-4o" is a thing you can point at and lock down.</p>
       <div class="tradeoff">Trade-off: graphs get messy past ~20 nodes. I added expand/collapse levels and a minimap rather than trying to draw everything at once.</div>
     </div>
-    <div class="fig has-shot"><img class="shot" src="images/m-9ca14a3175.webp" alt="Agent topology for RiskScorerAgent" loading="lazy"></div>
+    <div class="fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-9ca14a3175.webp" alt="Agent topology for RiskScorerAgent" loading="lazy"></div>
   </div>
 
   <div class="decision">
@@ -1534,7 +1603,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div><span>Platform</span>Web · admin console</div>
     <div><span>Status</span>Used in the GovCon solution (Sep 2023)</div>
   </div>
-  <div class="hero-fig has-shot"><img class="shot" src="images/m-0ab47a5585.webp" alt="Business Process Designer: building a contract process stage by stage" loading="lazy"></div>
+  <div class="hero-fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-0ab47a5585.webp" alt="Business Process Designer: building a contract process stage by stage" loading="lazy"></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -1568,7 +1637,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p>Admins move things with explicit actions ("move parallel to the right stage", "make a sub-step") rather than free drag, which kept the structure valid at every moment.</p>
       <div class="tradeoff">Trade-off: no free-form canvas. Some admins asked for it; the constraint is what made processes reliable at runtime.</div>
     </div>
-    <div class="fig has-shot" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot" autoplay muted loop playsinline preload="none" aria-label="Prototype: an admin building a process stage by stage"><source src="images/m-4f728a1f93.webm" type="video/webm"><source src="images/m-9344a21b84.mp4" type="video/mp4"></video><small style="font-size:12px;color:var(--graphite)">Prototype walkthrough, Nov 2022 · sped up 6×</small></div>
+    <div class="fig has-shot" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot" autoplay muted loop playsinline preload="none" aria-label="Prototype: an admin building a process stage by stage"><source src="https://nehayadav07.github.io/images/m-4f728a1f93.webm" type="video/webm"><source src="https://nehayadav07.github.io/images/m-9344a21b84.mp4" type="video/mp4"></video><small style="font-size:12px;color:var(--graphite)">Prototype walkthrough, Nov 2022 · sped up 6×</small></div>
   </div>
 
   <div class="dg-wrap flowbox" style="margin-top:20px"><div class="dg-title">Workflow architecture <span>one model: process → stages → steps with logic → sub-steps, read by the tracker</span></div><div class="flow-scroll"><svg class="flow-svg" viewBox="0 0 1000 300" role="img" aria-label="Workflow architecture: a process has stages that can run in parallel; steps inside a stage carry logic (mandatory, repeat, conditional); sub-steps are the checklist; the tracker reads the same model; invalid structure is prevented by explicit actions." font-family="DM Sans, Helvetica Neue, Arial, sans-serif"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a92ad"/></marker><marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5B2E9E"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs><path d="M140,178.0 C170,178.0 150,85.0 180,85.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
@@ -1670,7 +1739,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <div class="metabar">
     <div><span>Role</span>Design system owner</div>
     <div><span>Systems</span>ACE, SMARE, TweenCraft</div>
-    <div><span>Modes</span>Light, dark, high contrast</div>
+    <div><span>Modes</span>Light and dark</div>
     <div><span>Tools</span>Figma variables, Dev Mode</div>
   </div>
 
@@ -1790,14 +1859,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <article>
     <aside><b>02</b>Modes</aside>
     <div class="prose">
-      <p class="lede">Light, dark and high contrast are the same names with different values.</p><p>Components bind to the name, so switching mode never touches a component. Contrast is checked in every mode before review.</p>
+      <p class="lede">Light and dark are the same names with different values.</p><p>Components bind to the name, so switching mode never touches a component. Contrast is checked in every mode before review.</p>
     </div>
   </article>
-  <div class="dg-wrap"><div class="dg-title">One token, three modes</div>
+  <div class="dg-wrap"><div class="dg-title">One token, two modes</div>
     <div class="mini-modes"><code>action.primary</code><b>→</b>
       <span class="mm l"><i style="background:#5B2E9E"></i>Light</span>
-      <span class="mm d"><i style="background:#A88BF0"></i>Dark</span>
-      <span class="mm h"><i style="background:#2B0B66"></i>High contrast</span></div></div>
+      <span class="mm d"><i style="background:#A88BF0"></i>Dark</span></div></div>
 
   <article>
     <aside><b>03</b>Components</aside>
@@ -1809,7 +1877,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <div class="cmp-wrap" data-mode="light">
     <div class="cmp-top">
       <div class="cmp-tabs" role="group" aria-label="Preview mode">
-        <button type="button" data-m="light" aria-pressed="true">Light</button><button type="button" data-m="dark" aria-pressed="false">Dark</button><button type="button" data-m="hc" aria-pressed="false">High contrast</button>
+        <button type="button" data-m="light" aria-pressed="true">Light</button><button type="button" data-m="dark" aria-pressed="false">Dark</button>
       </div>
     </div>
     <div class="cmp-grid">
@@ -1863,7 +1931,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
       <p class="lede">A new brand or white-label client is a new mode, not a new system.</p>
     </div>
   </article>
-  <div class="dg-wrap flowbox"><div class="dg-title">Flow · adding a brand <span>no loops back until contrast passes</span></div><div class="flow-scroll"><svg class="flow-svg" viewBox="0 0 1000 246" role="img" aria-label="Adding a brand: add a brand mode, semantic aliases remap, check contrast in all three modes, components stay unchanged, products re-skin." font-family="DM Sans, Helvetica Neue, Arial, sans-serif"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a92ad"/></marker><marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5B2E9E"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs><path d="M140,97.0 C170,97.0 145,97.0 175,97.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
+  <div class="dg-wrap flowbox"><div class="dg-title">Flow · adding a brand <span>no loops back until contrast passes</span></div><div class="flow-scroll"><svg class="flow-svg" viewBox="0 0 1000 246" role="img" aria-label="Adding a brand: add a brand mode, semantic aliases remap, check contrast in both modes, components stay unchanged, products re-skin." font-family="DM Sans, Helvetica Neue, Arial, sans-serif"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a92ad"/></marker><marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5B2E9E"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs><path d="M140,97.0 C170,97.0 145,97.0 175,97.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
 <path d="M325,97.0 C355,97.0 330,97.0 360,97.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
 <path d="M510,97.0 C540,97.0 518,97.0 548,97.0" fill="none" stroke="#9a92ad" stroke-width="1.6" class="fl" marker-end="url(#ah)"/>
 <path d="M678,97.0 C708,97.0 686,97.0 716,97.0" fill="none" stroke="#2E7D32" stroke-width="1.6" class="fl" marker-end="url(#ahg)"/>
@@ -1884,7 +1952,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 <text x="435.0" y="108.5" text-anchor="middle" font-size="11" font-weight="500" fill="#6e6780">action · focus · selection</text>
 <polygon points="613.0,50 678,97.0 613.0,144 548,97.0" fill="#fff" stroke="#5B2E9E" stroke-width="1.5"/>
 <text x="613.0" y="93.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e1a26">Contrast passes</text>
-<text x="613.0" y="108.5" text-anchor="middle" font-size="11" font-weight="500" fill="#6e6780">in all 3 modes?</text>
+<text x="613.0" y="108.5" text-anchor="middle" font-size="11" font-weight="500" fill="#6e6780">in both modes?</text>
 <rect x="548" y="186" width="130" height="46" rx="10" fill="#FDECEE" stroke="#E3A1AA" stroke-width="1.5"/>
 <text x="613.0" y="213.0" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7d1c22">Adjust ramp steps</text>
 <rect x="716" y="70" width="150" height="54" rx="10" fill="#E8F6E8" stroke="#9BD49B" stroke-width="1.5"/>
@@ -1999,7 +2067,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     </div>
     <div class="stats">
       <div><b>3</b><span>systems: legal tech, AI security, consumer</span></div>
-      <div><b>3</b><span>modes: light, dark, high contrast</span></div>
+      <div><b>2</b><span>modes: light and dark</span></div>
       <div><b>25+</b><span>components in ACE alone</span></div>
     </div>
   </div>
@@ -2014,7 +2082,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <p class="hook">A workbench for the people who run supplier contracts day to day. It ties obligations to the KPIs they move, and chains them into value chains, so a late task shows what it holds up.</p>
   <div class="metabar"><div><span>Role</span>Product designer</div><div><span>Company</span>Icertis</div><div><span>Type</span>Interactive prototype</div><div><span>Status</span>Demoed May 2023</div></div>
 
-  <div class="hero-fig has-shot"><img class="shot" src="images/m-8d1edf5f46.webp" alt="Value chain tree: a commencing obligation with dependent obligations and their progress, with a minimap on the left" loading="lazy"></div>
+  <div class="hero-fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-8d1edf5f46.webp" alt="Value chain tree: a commencing obligation with dependent obligations and their progress, with a minimap on the left" loading="lazy"></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -2026,8 +2094,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div class="prose"><p class="lede">One workbench, three layers: KPIs, value chains, and the obligations inside them.</p></div>
   </article>
   <div class="wb-shots">
-    <figure><img class="shot" src="images/m-6b220ae584.webp" alt="Persona workbench dashboard with KPI tiles, rollout status charts and overdue tasks" loading="lazy"><figcaption><b>Persona dashboard.</b> KPI tiles first, then rollout status and the tasks that are overdue or coming up. Filters stay on the left so the view fits each role.</figcaption></figure>
-    <figure><img class="shot" src="images/m-d5ce226f5e.webp" alt="Value chain tree with a Review Obligation Fulfilment side panel" loading="lazy"><figcaption><b>Value chains.</b> Obligations chained from the one that starts them, each showing progress, overdue and due-soon counts. A minimap keeps long chains navigable; selecting a node opens its fulfilment in a side panel.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-6b220ae584.webp" alt="Persona workbench dashboard with KPI tiles, rollout status charts and overdue tasks" loading="lazy"><figcaption><b>Persona dashboard.</b> KPI tiles first, then rollout status and the tasks that are overdue or coming up. Filters stay on the left so the view fits each role.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-d5ce226f5e.webp" alt="Value chain tree with a Review Obligation Fulfilment side panel" loading="lazy"><figcaption><b>Value chains.</b> Obligations chained from the one that starts them, each showing progress, overdue and due-soon counts. A minimap keeps long chains navigable; selecting a node opens its fulfilment in a side panel.</figcaption></figure>
   </div>
   <article>
     <aside></aside>
@@ -2038,7 +2106,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <aside><b>03</b>After the demo</aside>
     <div class="prose"><p class="lede">Stakeholder review changed the KPI strip.</p><p>It gained a title, a last-refresh date, a refresh next to the data it refreshes, and a control to hide KPIs when someone just wants the chain list.</p></div>
   </article>
-  <div class="hero-fig has-shot" style="margin-top:8px"><img class="shot" src="images/m-8786464129.webp" alt="Value chains list after review, with titled KPI strip, last refresh date, refresh and hide KPIs controls" loading="lazy"></div>
+  <div class="hero-fig has-shot" style="margin-top:8px"><img class="shot" src="https://nehayadav07.github.io/images/m-8786464129.webp" alt="Value chains list after review, with titled KPI strip, last refresh date, refresh and hide KPIs controls" loading="lazy"></div>
 
   <div class="outcome">
     <div><h3>Outcome</h3><p>Demoed to Icertis stakeholders in May 2023 and refined after review. It changed how I think about obligations: not a list to clear, but a network that protects business results.</p></div>
@@ -2054,7 +2122,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <p class="hook">An internal deal platform for a Canadian capital advisory firm. Every loan, from first conversation to funded, with the client, the lenders and the next step in one place.</p>
   <div class="metabar"><div><span>Role</span>Lead product designer</div><div><span>Company</span>Arth Consulting, via DataOrc</div><div><span>Timeline</span>Jul 2024 – Jun 2025</div><div><span>Status</span>Shipped, in internal use</div></div>
 
-  <div class="hero-fig has-shot"><img class="shot" src="images/m-927cd1df44.webp" alt="Deals table with stage tabs, status tags and mandate date warnings" loading="lazy"></div>
+  <div class="hero-fig has-shot"><img class="shot" src="https://nehayadav07.github.io/images/m-927cd1df44.webp" alt="Deals table with stage tabs, status tags and mandate date warnings" loading="lazy"></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -2067,9 +2135,9 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   </article>
   <div class="xa-dec">
     
-    <figure><img class="shot" src="images/m-6e18aea443.webp" alt="Deal detail with Progress Overview" loading="lazy"><figcaption><i>02</i><b>Every deal carries its own checklist.</b> A Progress Overview rail runs from prospect to funding, so anyone opening a deal sees what is done, what is next and what is due, without asking the advisor.</figcaption></figure>
-    <figure><img class="shot" src="images/m-7b37f8bb26.webp" alt="Lenders tab with package status per lender" loading="lazy"><figcaption><i>03</i><b>One package, many lenders.</b> The deal package goes to several banks at once, and each lender gets its own status (package sent, in progress, accepted) and its own documents.</figcaption></figure>
-    <figure><img class="shot" src="images/m-6108b7606d.webp" alt="Merge/Decide tool comparing two duplicate client records" loading="lazy"><figcaption><i>04</i><b>Duplicates get resolved, not hidden.</b> When two advisors claim the same client, an admin compares both records side by side, with differences highlighted, and decides once.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-6e18aea443.webp" alt="Deal detail with Progress Overview" loading="lazy"><figcaption><i>02</i><b>Every deal carries its own checklist.</b> A Progress Overview rail runs from prospect to funding, so anyone opening a deal sees what is done, what is next and what is due, without asking the advisor.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-7b37f8bb26.webp" alt="Lenders tab with package status per lender" loading="lazy"><figcaption><i>03</i><b>One package, many lenders.</b> The deal package goes to several banks at once, and each lender gets its own status (package sent, in progress, accepted) and its own documents.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-6108b7606d.webp" alt="Merge/Decide tool comparing two duplicate client records" loading="lazy"><figcaption><i>04</i><b>Duplicates get resolved, not hidden.</b> When two advisors claim the same client, an admin compares both records side by side, with differences highlighted, and decides once.</figcaption></figure>
   </div>
 
   <div class="outcome">
@@ -2085,7 +2153,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <h1>TweenCraft</h1>
   <p class="hook">Create-and-share flows for a cartoon video maker with 10M+ downloads: the editor, voice recording, character store and community feed.</p>
   <div class="metabar"><div><span>Role</span>UX / product designer</div><div><span>Company</span>Kalpkriti</div><div><span>Timeline</span>May – Jul 2021</div><div><span>Platform</span>Android app</div><div><span>Status</span>Live, 10M+ downloads</div></div>
-  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot tcv" autoplay muted loop playsinline preload="none" poster="images/m-75f17af8d1.webp" aria-label="A short TweenCraft movie: When Batman meets a ghost"><source src="images/m-6d8337b393.webm" type="video/webm"><source src="images/m-12d1567f62.mp4" type="video/mp4"></video><small class="tccap">A user movie in the feed: <b>“When Batman meets a ghost”</b>, made in the app with characters, a background and speech bubbles.</small></div>
+  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot tcv" autoplay muted loop playsinline preload="none" poster="images/m-75f17af8d1.webp" aria-label="A short TweenCraft movie: When Batman meets a ghost"><source src="https://nehayadav07.github.io/images/m-6d8337b393.webm" type="video/webm"><source src="https://nehayadav07.github.io/images/m-12d1567f62.mp4" type="video/mp4"></video><small class="tccap">A user movie in the feed: <b>“When Batman meets a ghost”</b>, made in the app with characters, a background and speech bubbles.</small></div>
 
   <article>
     <aside><b>01</b>The problem</aside>
@@ -2099,7 +2167,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <aside><b>03</b>Getting started</aside>
     <div class="prose"><p class="lede">New users learn by doing, inside the real app, not in a manual.</p><p>The feed teaches the first gesture with a "swipe for next movie" hint. A tooltip on the centre button points to "Create new movie". Then users choose a random theme, a custom theme, or quick tutorials, and the editor coaches one step at a time: add a frame, add characters and backgrounds, tap the mic to record a voice.</p></div>
   </article>
-  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px;margin-top:8px"><video class="shot tcv" autoplay muted loop playsinline preload="none" poster="images/m-83e0b0a3cb.webp" aria-label="Getting started in TweenCraft: swipe hint, create new movie, quick tutorials, add frame coach mark"><source src="images/m-aa82813980.webm" type="video/webm"><source src="images/m-e9e47524bd.mp4" type="video/mp4"></video><small class="tccap">The guided first run: swipe hint → create new movie → choose how to start → coach marks in the editor.</small></div>
+  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px;margin-top:8px"><video class="shot tcv" autoplay muted loop playsinline preload="none" poster="images/m-83e0b0a3cb.webp" aria-label="Getting started in TweenCraft: swipe hint, create new movie, quick tutorials, add frame coach mark"><source src="https://nehayadav07.github.io/images/m-aa82813980.webm" type="video/webm"><source src="https://nehayadav07.github.io/images/m-e9e47524bd.mp4" type="video/mp4"></video><small class="tccap">The guided first run: swipe hint → create new movie → choose how to start → coach marks in the editor.</small></div>
 
   <div class="outcome">
     <div><h3>Outcome</h3><p>TweenCraft is live on <a href="https://play.google.com/store/apps/details?id=com.kk.chimpoon" target="_blank" rel="noopener" style="color:inherit">Google Play</a> with over 10 million downloads.</p></div>
@@ -2114,7 +2182,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
   <h1>Visual Schedules</h1>
   <p class="hook">A bilingual Hindi–English visual schedule maker for autistic and neurodiverse children. I designed it and built it end to end, with AI helping on the code and backend.</p>
   <div class="metabar"><div><span>Role</span>Founder, designer and builder</div><div><span>Brand</span>Grow Gently</div><div><span>Languages</span>Hindi and English</div><div><span>Platform</span>Web, mobile-friendly</div><div><span>Status</span>Live at visualschedule.app</div></div>
-  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot" autoplay muted loop playsinline preload="none" poster="images/m-b4cadebdc6.webp" aria-label="Building a bilingual visual schedule in the real app: search, tap four cards, switch on Hindi"><source src="images/m-5c6dfe4be5.webm" type="video/webm"><source src="images/m-349f5a354a.mp4" type="video/mp4"></video><small class="tccap">The real builder: search a card, tap to place it, switch on <b>Hindi</b>. A printable bilingual schedule in under 15 seconds.</small></div>
+  <div class="hero-fig has-shot tc-fig" style="flex-direction:column;align-items:stretch;gap:10px"><video class="shot" autoplay muted loop playsinline preload="none" poster="images/m-b4cadebdc6.webp" aria-label="Building a bilingual visual schedule in the real app: search, tap four cards, switch on Hindi"><source src="https://nehayadav07.github.io/images/m-5c6dfe4be5.webm" type="video/webm"><source src="https://nehayadav07.github.io/images/m-349f5a354a.mp4" type="video/mp4"></video><small class="tccap">The real builder: search a card, tap to place it, switch on <b>Hindi</b>. A printable bilingual schedule in under 15 seconds.</small></div>
   <div class="ext"><a href="https://visualschedule.app" target="_blank" rel="noopener">Visit visualschedule.app ↗</a><a href="https://www.instagram.com/visual_schedule_official/" target="_blank" rel="noopener">Instagram ↗</a><a href="https://www.youtube.com/@VisualSchedulesOfficial" target="_blank" rel="noopener">YouTube ↗</a></div>
   <article>
     <aside><b>01</b>The problem</aside>
@@ -2125,8 +2193,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
     <div class="prose"><ul><li>Designed a schedule builder with a card library, search and categories.</li><li>Designed card types (Visual, Equal and Text Focus) and a First/Then board.</li><li>Added bilingual and multilingual card labels.</li><li>Built PDF and JPEG export for printing and sharing, plus a mobile schedule builder.</li><li>Built the product myself with AI as a coding partner: Next.js, Cloudflare and Razorpay subscriptions.</li><li>Ran the launch: free schedules, a blog, and Instagram and YouTube channels.</li></ul></div>
   </article>
   <div class="wb-shots vs-shots">
-    <figure><img class="shot" src="images/m-e447f0b7d0.webp" alt="Printable A4 schedule with Wake Up, Potty Time, Brush Teeth and Breakfast, each labelled in English and Hindi" loading="lazy"><figcaption><b>The output is the product.</b> An A4 page a parent can print and stick on the fridge: one picture per step, English and Hindi on every card, and a QR code back to the builder.</figcaption></figure>
-    <figure><img class="shot" src="images/m-9085e2a4dc.webp" alt="Mobile flow: choose a routine template or create your own" loading="lazy"><figcaption><b>Phones start from a routine.</b> On mobile, parents pick School Morning, Bedtime or After School and edit from there, instead of building on a small screen from nothing.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-e447f0b7d0.webp" alt="Printable A4 schedule with Wake Up, Potty Time, Brush Teeth and Breakfast, each labelled in English and Hindi" loading="lazy"><figcaption><b>The output is the product.</b> An A4 page a parent can print and stick on the fridge: one picture per step, English and Hindi on every card, and a QR code back to the builder.</figcaption></figure>
+    <figure><img class="shot" src="https://nehayadav07.github.io/images/m-9085e2a4dc.webp" alt="Mobile flow: choose a routine template or create your own" loading="lazy"><figcaption><b>Phones start from a routine.</b> On mobile, parents pick School Morning, Bedtime or After School and edit from there, instead of building on a small screen from nothing.</figcaption></figure>
   </div>
   <div class="outcome">
     <div><h3>Outcome</h3><p>Visual Schedules is live and used by families. Designing it and shipping it myself, with AI, changed how I prototype: I can now take an idea from Figma to a working product.</p></div>
@@ -2221,5 +2289,14 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;bac
 (function(){var els=document.querySelectorAll('#cv-btn,.cv-link');function hide(){els.forEach(function(e){e.hidden=true;});}
 if(location.protocol==='file:'||!window.fetch){return;}
 fetch('Neha-Yadav-Resume.pdf',{method:'HEAD'}).then(function(r){if(!r.ok)hide();}).catch(hide);})();
+</script>
+<div class="progress" aria-hidden="true"></div>
+<script>
+(function(){
+  var bar=document.querySelector('.progress');
+  if(!bar||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){if(bar)bar.hidden=true;return;}
+  var t=false;function up(){var h=document.documentElement.scrollHeight-innerHeight;bar.style.setProperty('--p',h>0?Math.min(1,scrollY/h):0);t=false;}
+  addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(up);}},{passive:true});addEventListener('resize',up);up();
+})();
 </script>
 </body></html>
